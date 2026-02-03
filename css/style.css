@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "Alte Haas Grotesk";
+  src: url("/assets/fonts/AlteHaasGrotesk-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: "Alte Haas Grotesk", sans-serif;
+}
+
+@keyframes scroll {
+    0% { transform: translateY(-1600px); } /* start fully above */
+    100% { transform: translateY(0); }      /* end at the top of container */
+}
+
+.animate-scroll {
+    animation: scroll 20s linear infinite;
+}
