@@ -16,6 +16,7 @@ a {
 }
 
 /* Header */
+/* Header */
 .header {
     position: fixed;
     top: 0;
@@ -23,25 +24,41 @@ a {
     z-index: 50;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0.5rem 1rem;
 }
 
-.header-left,
-.header-center,
-.header-right {
+/* Left section */
+.header-left {
+    flex: 1; /* takes up left space */
     font-weight: 500;
     font-size: 1rem;
 }
 
+/* Center section */
 .header-center {
+    flex: 0; /* doesn’t grow */
     text-align: center;
+    font-weight: 500;
+    font-size: 1rem;
 }
 
-.header-center a,
+/* Center link padding */
+.header-center a {
+    padding: 0 0.5rem;
+}
+
+/* Right section */
+.header-right {
+    flex: 1; /* takes up right space */
+    text-align: right;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
 .header-right a {
     padding: 0 0.5rem;
 }
+
 
 /* Main layout */
 .main {
@@ -50,77 +67,146 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
 }
 
 /* Homepage layout */
 .homepage-content {
     width: 100%;
-    position: relative;
+    height: 60%;
     display: flex;
-    justify-content: center; /* centers square column */
+    flex-direction: row;
+    justify-content: space-evenly; /* centers square column */
     align-items: center;
+}
+
+.left-column {
+    display: flex;
+    align-items: center;
+    aspect-ratio: 150 / 500;
+    height: 100%;
 }
 
 /* Left text */
-.left-side {
-    position: absolute;
-    left: calc(50% - 37.7vw); /* 50% to get to center, then 37.7vw to position text between square and left viewport edge */
+.info {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    text-align: left;
+    gap: 2rem;
+    border: solid 1px #ff0000;
 }
 
-.left-side p {
-    max-width: clamp(10ch, 15vw, 16ch);
+.info p {
+    max-width: 100%;
 }
 
 /* Center column */
-.square-column {
+.center-column {
     display: flex;
+    aspect-ratio: 1 / 1;
     flex-direction: column;
     align-items: center;
+    height: 100%;
 }
 
-/* Square */
+/* square */
 .square {
-    width: 30vw;
+    display: flex;
+    flex-direction: column;
     aspect-ratio: 1 / 1;
-    border: 1px solid #000;
-    position: relative;
+    width: 100%;
+    border: solid 1px #000;
+    align-self: center;
 }
 
-/* Overlay image */
-.overlay-image {
+/* slideshow loading ring */
+.loading-ring {
+    width: 2vh;
+    height: 2vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: flex-start;
+}
+
+.ring-bg {
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 1;
+}
+
+.ring-progress {
+    fill: none;
+    stroke: #000;
+    stroke-width: 1;
+    stroke-linecap: round;
+
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset linear;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.hero-border {
+    position: relative; /* REQUIRED for overlay animation */
+    display: flex;
+    align-self: center;
+    justify-content: center; /* center content horizontally */
+    aspect-ratio: 2 / 3;
+    width: 39vh;
+    border: 1px solid #000;
+    overflow: hidden;
+    background-color: white;
+    transform: translateY(-5vh);
+}
+
+.hero-image {
+    width: 100%;             /* fill width of container */
+    height: 100%;            /* fill height of container */
+    transition: opacity 0.6s ease, filter 0.6s ease;
+    z-index: 1;
+}
+
+/* fade out with tech filter */
+.hero-image.fade-out {
+    opacity: 0;
+    filter: grayscale(80%) contrast(150%) brightness(120%);
+}
+
+/* halftone / tech overlay during transition */
+.tech-overlay {
     position: absolute;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(-12%);
-    width: 70%;
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: radial-gradient(#ccc 1px, transparent 1px);
+    background-size: 8px 8px;
+    opacity: 0;
+    transition: opacity 1s ease;
+    mix-blend-mode: lighten;
+    z-index: 2;
 }
 
-/* Square nav */
+
+/* square nav */
 .square-nav {
     width: 100%;
-    margin-top: 1rem;
     display: flex;
     justify-content: space-between;
     font-weight: 500;
     font-size: 1rem;
+    margin-top: 1rem;
 }
 
 /* Right banner */
 .banner-wrapper {
-    position: absolute;
-    right: calc(50% - 37vw); /* 50% to get to center, then 37vw to position banner between square and right viewport edge */
-    width: 9vw;
+    display: flex;
+    flex-direction: column;
     aspect-ratio: 150 / 500;
-    border: 1px solid #000;
+    border: solid 1px #000;
     overflow: hidden;
-    transform: translateY(-1.17vw); /* to align top of banner with top of square */
+    align-self: stretch;
 }
 
 /* Banner animation */
