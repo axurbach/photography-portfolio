@@ -7,7 +7,7 @@
 
 body {
     font-family: "Alte Haas Grotesk", sans-serif;
-    overflow-y: hidden; /* prevent vertical scroll */
+    overflow-y: hidden;
 }
 
 a {
@@ -27,17 +27,19 @@ a {
     padding: 0.5rem 1rem;
 }
 
-.header-left, .header-center, .header-right {
+.header-left,
+.header-center,
+.header-right {
     font-weight: 500;
     font-size: 1rem;
 }
 
 .header-center {
     text-align: center;
-    flex: 1;
 }
 
-.header-center a, .header-right a {
+.header-center a,
+.header-right a {
     padding: 0 0.5rem;
 }
 
@@ -51,62 +53,19 @@ a {
     position: relative;
 }
 
-/* Center square + overlay + nav */
-.square-wrapper {
-    display: flex;           /* horizontal layout of square + rectangle */
-    align-items: stretch;    /* makes banner match square height */
-    gap: 2vw;               /* spacing between square and rectangle */
-    flex-direction: row;     /* default, can omit */
+/* Homepage layout */
+.homepage-content {
+    width: 100%;
     position: relative;
-    transform: translateX(5.5vw);
-}
-
-/* Square container */
-.square {
-    width: 30vw;
-    aspect-ratio: 1 / 1;
-    border: 1px solid #000;
-    position: relative;
-}
-
-/* Overlay image inside square */
-.overlay-image {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(-8%);
-    width: 70%;            /* relative to square */
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
-}
-
-.banner-wrapper {
-    width: 9vw;
-    aspect-ratio: 150 / 500;  /* keeps the banner tall and narrow */
-    border: 1px solid #000;
-    overflow: hidden;
-    position: relative;
-}
-
-/* Square nav */
-.square-nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* centers square column */
     align-items: center;
-    margin-top: 1rem;
-    width: 30vw;           /* same as square */
-    font-weight: 500;
-    font-size: 1rem;
-    transform: translateX(5.5vw);
 }
 
-/* Left sidebar */
+/* Left text */
 .left-side {
     position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    width: calc(50% - 15vw); /* margin space between left edge and center */
+    left: calc(50% - 37.7vw); /* 50% to get to center, then 37.7vw to position text between square and left viewport edge */
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -114,9 +73,57 @@ a {
 }
 
 .left-side p {
-    max-width: 17ch; /* ~3 words per line */
+    max-width: clamp(10ch, 15vw, 16ch);
 }
 
+/* Center column */
+.square-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Square */
+.square {
+    width: 30vw;
+    aspect-ratio: 1 / 1;
+    border: 1px solid #000;
+    position: relative;
+}
+
+/* Overlay image */
+.overlay-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-12%);
+    width: 70%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+}
+
+/* Square nav */
+.square-nav {
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* Right banner */
+.banner-wrapper {
+    position: absolute;
+    right: calc(50% - 37vw); /* 50% to get to center, then 37vw to position banner between square and right viewport edge */
+    width: 9vw;
+    aspect-ratio: 150 / 500;
+    border: 1px solid #000;
+    overflow: hidden;
+    transform: translateY(-1.17vw); /* to align top of banner with top of square */
+}
+
+/* Banner animation */
 .animate-scroll {
     display: flex;
     flex-direction: column;
