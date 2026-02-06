@@ -5,7 +5,7 @@ const images = [
 ];
 
 let currentIndex = 0;
-const duration = 5000; // same as your slideshow interval
+const duration = 7000; // same as slideshow interval
 
 const imageElement = document.getElementById("hero-image");
 const overlay = document.querySelector(".tech-overlay");
@@ -18,7 +18,7 @@ function startProgress() {
     // force reflow so reset actually applies
     ring.getBoundingClientRect();
 
-    ring.style.transition = `stroke-dashoffset ${duration}ms linear`;
+    ring.style.transition = `stroke-dashoffset ${duration}ms ease-in-out`;
     ring.style.strokeDashoffset = "0";
 }
 
