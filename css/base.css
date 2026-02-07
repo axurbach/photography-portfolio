@@ -1,0 +1,94 @@
+/* Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Alte Haas Grotesk", sans-serif;
+    overflow-y: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Header */
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+/* Left section */
+.header-left {
+    flex: 1; /* takes up left space */
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* Center section */
+.header-center {
+    flex: 0; /* doesn’t grow */
+    text-align: center;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* Center link padding */
+.header-center a {
+    padding: 0 0.5rem;
+}
+
+/* Right section */
+.header-right {
+    flex: 1; /* takes up right space */
+    text-align: right;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.header-right a {
+    padding: 0 0.5rem;
+}
+
+
+/* Main layout */
+.main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.footer-center-right {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.footer-right {
+    text-align: right;
+}

@@ -1,5 +1,7 @@
 console.log("dev ruler loaded");
 
+let devRulerEnabled = true;
+
 let ruler = null;
 let startX = 0;
 let startY = 0;
@@ -8,6 +10,7 @@ let startY = 0;
 const rulers = [];
 
 document.addEventListener("mousedown", (e) => {
+    if (!devRulerEnabled) return;
     startX = e.clientX;
     startY = e.clientY;
 
@@ -31,7 +34,7 @@ document.addEventListener("mousedown", (e) => {
 });
 
 document.addEventListener("mousemove", (e) => {
-    if (!ruler) return;
+    if (!devRulerEnabled || !ruler) return;
 
     const width = e.clientX - startX;
     const height = e.clientY - startY;
@@ -47,13 +50,26 @@ document.addEventListener("mousemove", (e) => {
 });
 
 document.addEventListener("mouseup", () => {
-    ruler = null; // stop current ruler
+    if (!devRulerEnabled) return;
+    ruler = null;
 });
 
 // Delete all rulers on Delete key
 document.addEventListener("keydown", (e) => {
-    if (e.key === "e") {
+    if (e.key === "/" || e.code === "Slash") {
+        devRulerEnabled = !devRulerEnabled;
+
+        if (!devRulerEnabled) {
+            rulers.forEach(r => r.remove());
+            rulers.length = 0;
+            ruler = null;
+        }
+
+        console.log(`Dev ruler ${devRulerEnabled ? "ON" : "OFF"}`);
+    }
+
+    if (e.key === "e" && devRulerEnabled) {
         rulers.forEach(r => r.remove());
-        rulers.length = 0; // clear array
+        rulers.length = 0;
     }
 });
