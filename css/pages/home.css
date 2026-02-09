@@ -162,35 +162,30 @@
 		padding-top: 0.5rem;
 }
 
-/* Right banner */
 .banner-wrapper {
     display: flex;
     flex-direction: column;
-    aspect-ratio: 150 / 500;
-    border: solid 1px #000;
+    aspect-ratio: 150 / 500; /* very tall banner */
     overflow: hidden;
+    border: 1px solid #000;
     align-self: stretch;
 }
 
-/* Banner animation */
-.animate-scroll {
+.banner-strip {
     display: flex;
     flex-direction: column;
-    animation: scroll 20s linear infinite;
-}
-
-.animate-scroll img {
+    gap: 0px; /* vertical spacing between images */
+    cursor: grab;
+    user-select: none;
+    height: 100%;
     width: 100%;
+    overflow: hidden; /* hide scrollbars */
+}
+
+.banner-strip img {
     display: block;
-}
-
-@keyframes scroll {
-    0% { transform: translateY(-1600px); }
-    100% { transform: translateY(0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .scrolling-banner {
-        animation: none;
-    }
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    rotate: 180deg;
 }

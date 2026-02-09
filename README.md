@@ -4,7 +4,7 @@ Personal portfolio website showcasing photography and web projects.
 
 ## Tech Stack
 - HTML
-- Tailwind CSS
+- CSS
 - JavaScript
 
 ## Status

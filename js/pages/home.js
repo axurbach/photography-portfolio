@@ -1,3 +1,5 @@
+let isInitialLoad = true;
+
 // -----------------------------
 // Homepage Slideshow + Collection Nav
 // -----------------------------
@@ -5,11 +7,12 @@
 // 1️⃣ Collections with their images
 const collections = [
     {
-        name: "bassvictim",
+        file: "bassvictim",
+        name: "collection :: bassvictim",
         images: [
-            "assets/images/collections/bassvictim/bassvictim-1.jpg",
-            "assets/images/collections/bassvictim/bassvictim-2.jpg",
-            "assets/images/collections/bassvictim/bassvictim-3.jpg"
+            "/assets/images/collections/bassvictim/bassvictim-1.jpg",
+            "/assets/images/collections/bassvictim/bassvictim-2.jpg",
+            "/assets/images/collections/bassvictim/bassvictim-3.jpg"
         ],
         texts: [
             [ "Bass Victim paragraph 1 line 1", "Bass Victim paragraph 1 line 2" ],
@@ -18,11 +21,12 @@ const collections = [
         ]
     },
     {
-        name: "berlin56",
+        file: "berlin56",
+        name: "collection :: berlin56",
         images: [
-            "assets/images/collections/berlin56/berlin56-1.jpg",
-            "assets/images/collections/berlin56/berlin56-2.jpg",
-            "assets/images/collections/berlin56/berlin56-3.jpg"
+            "/assets/images/collections/berlin56/berlin56-1.jpg",
+            "/assets/images/collections/berlin56/berlin56-2.jpg",
+            "/assets/images/collections/berlin56/berlin56-3.jpg"
         ],
         texts: [
             [ "Berlin 56 paragraph 1 line 1", "Berlin 56 paragraph 1 line 2" ],
@@ -104,7 +108,7 @@ function updateLink() {
 
     setTimeout(() => {
         const col = collections[currentCollectionIndex];
-        linkEl.innerHTML = `collection :: <a href="collections/${col.name}.html" target="_blank">${col.name}</a>`;
+        linkEl.innerHTML = `<a href="/collections/${col.file}.html" target="_blank">${col.name}</a>`;
         linkEl.classList.remove("fade-out");
     }, 200);
 }
@@ -116,25 +120,27 @@ function switchCollection(index) {
     currentCollectionIndex = index;
     currentImageIndex = 0;
 
-    // update hero image immediately
-    overlay.style.opacity = "0.6";
-    imageElement.classList.add("fade-out");
+    if (!isInitialLoad) {
+        overlay.style.opacity = "0.6";
+        imageElement.classList.add("fade-out");
+    }
 
     setTimeout(() => {
         imageElement.src = collections[currentCollectionIndex].images[0];
         imageElement.classList.remove("fade-out");
         overlay.style.opacity = "0";
         startProgress();
-    }, 300);
+    }, isInitialLoad ? 0 : 300);
 
-    // update nav link + paragraphs 
     updateLink();
     updateText();
 
-    // reset interval so slideshow stays synced
     clearInterval(slideshowInterval);
     slideshowInterval = setInterval(showNextImage, duration);
+
+    isInitialLoad = false;
 }
+
 
 // -----------------------------
 // Square nav buttons
@@ -153,3 +159,144 @@ squareNextBtn.addEventListener("click", () => {
 // Initialize
 // -----------------------------
 switchCollection(0); // starts first collection
+
+// banner
+
+document.addEventListener("DOMContentLoaded", () => {
+    const images = [
+        "/assets/images/home/home-banner.png"
+    ];
+
+    const container = document.querySelector(".banner-strip");
+    const IMAGE_GAP = 0; // vertical spacing
+    const CLONE_COUNT = 3;
+
+    function createSequence() {
+        const seq = document.createElement("div");
+        seq.classList.add("sequence");
+        seq.style.display = "flex";
+        seq.style.flexDirection = "column";
+        seq.style.gap = IMAGE_GAP + "px";
+
+        images.forEach(src => {
+            const img = document.createElement("img");
+            img.src = src;
+            seq.appendChild(img);
+        });
+
+        return seq;
+    }
+
+    // Add sequences
+    for (let i = 0; i < CLONE_COUNT; i++) {
+        container.appendChild(createSequence());
+    }
+
+    // Start in middle
+    container.scrollTop = container.querySelector(".sequence").offsetHeight;
+
+    // Drag & momentum
+    let isDragging = false;
+    let startY = 0;
+    let scrollStart = 0;
+    let velocity = 0;
+    let lastY = 0;
+    let momentumID;
+    let isMomentumActive = false;
+
+    // Auto-scroll speed
+    const AUTO_SCROLL_SPEED = 60; // pixels per second
+    let lastTime = performance.now();
+
+    container.addEventListener("mousedown", e => {
+        isDragging = true;
+        startY = e.pageY;
+        scrollStart = container.scrollTop;
+        lastY = e.pageY;
+        velocity = 0;
+        container.style.cursor = "grabbing";
+
+        if (momentumID) cancelAnimationFrame(momentumID);
+    });
+
+    container.addEventListener("mousemove", e => {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        const dy = e.pageY - startY;
+        container.scrollTop = scrollStart - dy;
+
+        velocity = e.pageY - lastY;
+        lastY = e.pageY;
+
+        handleInfiniteScroll();
+    });
+
+    container.addEventListener("mouseup", () => {
+        if (isDragging) {
+            isDragging = false;
+            container.style.cursor = "grab";
+            applyMomentum();
+        }
+    });
+
+    container.addEventListener("mouseleave", () => {
+        if (isDragging) {
+            isDragging = false;
+            container.style.cursor = "grab";
+            applyMomentum();
+        }
+    });
+
+    container.addEventListener("wheel", e => {
+        e.preventDefault();
+        container.scrollTop += e.deltaY;
+        handleInfiniteScroll();
+    });
+
+    function applyMomentum() {
+        isMomentumActive = true;
+        velocity *= 0.95;
+
+        if (Math.abs(velocity) < 0.5) {
+            isMomentumActive = false;
+            return;
+        }
+
+        container.scrollTop -= velocity;
+        handleInfiniteScroll();
+        momentumID = requestAnimationFrame(applyMomentum);
+    }
+
+    function handleInfiniteScroll() {
+        const sequences = Array.from(container.querySelectorAll(".sequence"));
+        if (sequences.length !== CLONE_COUNT) return;
+
+        const firstSeqHeight = sequences[0].offsetHeight;
+
+        if (container.scrollTop >= firstSeqHeight * 2) {
+            container.scrollTop -= firstSeqHeight;
+        }
+
+        if (container.scrollTop <= 0) {
+            container.scrollTop += firstSeqHeight;
+        }
+    }
+
+    function autoScroll(currentTime) {
+        const deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+
+        if (!isDragging && !isMomentumActive) {
+            // Calculate current first sequence height dynamically
+            const seqHeight = container.querySelector(".sequence").offsetHeight;
+            // Scale scroll by current height
+            container.scrollTop += (AUTO_SCROLL_SPEED * deltaTime) / -1000;
+            handleInfiniteScroll();
+        }
+
+        requestAnimationFrame(autoScroll);
+    }
+
+    requestAnimationFrame(autoScroll);
+});
