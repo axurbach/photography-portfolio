@@ -6,12 +6,12 @@
     <title>Photography Portfolio</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/pages/about.css">
+    <link rel="stylesheet" href="css/pages/contact.css">
 </head>
 <body>
 
 <header class="header">
-    <div class="header-left"><a href="index.html">17099450a</a></div>
+    <div class="header-left">17099450a</div>
     <div class="header-center"><a href="index.html">home</a></div>
     <nav class="header-right">
         <a href="about.html">about</a>
@@ -21,27 +21,32 @@
 
 <main class="main">
 
-    <section class="aboutpage-content">
+    <section class="contactpage-content">
 
-        <img src="assets/images/about/self-portrait.jpg" alt="self portrait of alexander urbach" class="self-portrait" id="self-portrait">
+		<div class="contact-column">
+			<div class="form-frame">
+				<form class="contact-form" action="https://formspree.io/f/tdbxdcf" method="POST">
+					<label for="name">name</label>
+					<input id="name" name="name" type="text" required>
 
-        <aside class="about-info">
-            <p>hi, my name is alexander urbach</p>
+					<label for="email">email</label>
+					<input id="email" name="email" type="email" required>
 
-            <p>i'm a concert photographer and junior web
-            developer based in ottawa, regularly travelling
-            between toronto and montreal</p>
+					<label for="message">message</label>
+					<textarea id="message" name="message" rows="5" required></textarea>
 
-            <p>i'm currently studying interactive media
-            design at algonquin college</p>
+					<button type="submit">send</button>
+				</form>
+			</div>
 
-            <p>capturing the unique
-            feeling and atmosphere of every show i
-            attend</p>
-
-            <p>is just as important as
-            the memories themselves</p>
-        </aside>
+			<div class="contact-nav">
+				<span id="contact-prev">&lt;</span>
+					<p id="contact-link">
+						email :: <a href="mailto:axurbach@gmail.com">axurbach@gmail.com</a>
+					</p>
+				<span id="contact-next">&gt;</span>
+			</div>
+		</div>
 
     </section>
 
@@ -58,6 +63,7 @@
     </div>
     <div class="footer-right"><a href="index.html">17099450a</a></div>
 </footer>
-    <script src="js/dev/ruler.js" defer></script>
+    <script src="js/dev/ruler.js"></script>
+	<script src="js/pages/contact.js"></script>
 </body>
 </html>

@@ -5,6 +5,10 @@
     padding: 0;
 }
 
+html {
+    font-size: 16px;
+}
+
 body {
     font-family: "Alte Haas Grotesk", sans-serif;
     overflow-y: hidden;
@@ -15,80 +19,19 @@ a {
     text-decoration: none;
 }
 
-/* Header */
-/* Header */
-.header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-}
-
-/* Left section */
-.header-left {
-    flex: 1; /* takes up left space */
-    font-weight: 500;
-    font-size: 1rem;
-}
-
-/* Center section */
-.header-center {
-    flex: 0; /* doesn’t grow */
-    text-align: center;
-    font-weight: 500;
-    font-size: 1rem;
-}
-
-/* Center link padding */
-.header-center a {
-    padding: 0 0.5rem;
-}
-
-/* Right section */
-.header-right {
-    flex: 1; /* takes up right space */
-    text-align: right;
-    font-weight: 500;
-    font-size: 1rem;
-}
-
-.header-right a {
-    padding: 0 0.5rem;
-}
-
-
-/* Main layout */
-.main {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Footer */
+.header,
 .footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 50;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    font-size: 1rem;
+    font-size: 14px;
 }
 
-.footer-center-right {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
+/* global selection style */
+::selection {
+    background-color: #000; 
+    color: #fff;           
 }
 
-.footer-right {
-    text-align: right;
+/* for firefox (uses ::-moz-selection) */
+::-moz-selection {
+    background-color: #000;
+    color: #fff;
 }
