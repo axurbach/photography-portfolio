@@ -18,6 +18,27 @@
     font-size: 16px;
 }
 
+#info-text {
+    opacity: 1;
+    transition: opacity 0.6s ease; /* default visible state */
+}
+
+/* bottom margin of first paragraph */
+#info-text p {
+    margin: 0 0 2rem 0; 
+}
+
+/* removes bottom margin of second paragraph */
+#info-text p:last-child {
+    margin-bottom: 0;
+}
+
+
+#info-text.fade-out {
+    opacity: 0;
+    transition: opacity 0.6s ease; /* match JS timing */
+}
+
 /* slideshow loading ring */
 .loading-ring {
     width: 100%;
@@ -116,7 +137,29 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-top: 1rem;
+}
+
+#square-link {
+    padding-top: 0.5rem;
+    transition: color 0.5s ease, opacity 0.5s ease;
+    color: #000; /* default text color */
+}
+
+#square-link.fade-out {
+    opacity: 0;
+    color: #fff; /* fades to white before switching */
+}
+
+#square-prev {
+	    cursor: pointer;
+		padding-right: 2rem;
+		padding-top: 0.5rem;
+}
+
+#square-next {
+	    cursor: pointer;
+		padding-left: 2rem;
+		padding-top: 0.5rem;
 }
 
 /* Right banner */
