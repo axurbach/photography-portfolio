@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const seq = document.createElement("div");
         seq.classList.add("sequence");
         seq.style.display = "flex";
-        seq.style.gap = IMAGE_GAP + "px";
+        seq.style.gap = IMAGE_GAP + "rem";
 
         images.forEach(src => {
             const img = document.createElement("img");

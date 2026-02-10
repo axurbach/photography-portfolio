@@ -1,5 +1,11 @@
 .collection-title {
+    display: flex;
 	transform: translateY(5vh);
+    width: 100%;
+    align-self: center;
+    justify-content: center;
+    border-top: black solid 1px;
+    padding-top: 1rem;
 }
 
 .collection-nav {
@@ -12,6 +18,8 @@
 	transform: translateY(10vh);
 	padding-left: 2vh;
 	padding-right: 2vh;
+    padding-bottom: 1rem;
+    border-bottom: black solid 1px;
 }
 
 .scroll-container {
@@ -26,8 +34,8 @@
 	z-index: 2;
 	transform: translateY(7.5vh);
 	background-color: black;
-	padding-top: 1px;
-	padding-bottom: 1px;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
 }
 
 .scroll-container img {
