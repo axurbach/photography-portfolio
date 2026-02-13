@@ -23,6 +23,23 @@ a {
     text-decoration: none;
 }
 
+/* Global button reset to look like links */
+button {
+    background: none;         /* remove default button background */
+    border: none;             /* remove default button border */
+    font-style: none;
+    color: inherit;           /* inherit your text/link color */
+    font: inherit;            /* inherit font style from parent */
+    cursor: pointer;          /* pointer on hover */
+    padding: 0;               /* remove default padding */
+    transition: color 0.3s;   /* smooth hover color transition */
+}
+
+/* Hover effect to match links */
+button:hover {
+    color: rgb(0, 0, 0); 
+}
+
 .header,
 .footer {
     font-size: 14px;

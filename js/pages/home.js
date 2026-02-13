@@ -11,8 +11,8 @@ const collections = [
         name: "collection :: bassvictim",
         images: [
             "/assets/images/collections/bassvictim/bassvictim-1.jpg",
-            "/assets/images/collections/bassvictim/bassvictim-2.jpg",
-            "/assets/images/collections/bassvictim/bassvictim-3.jpg"
+            "/assets/images/collections/bassvictim/bassvictim-2-c.jpg",
+            "/assets/images/collections/bassvictim/bassvictim-7.jpg"
         ],
         texts: [
             [ "Bass Victim paragraph 1 line 1", "Bass Victim paragraph 1 line 2" ],
@@ -25,7 +25,7 @@ const collections = [
         name: "collection :: berlin56",
         images: [
             "/assets/images/collections/berlin56/berlin56-1.jpg",
-            "/assets/images/collections/berlin56/berlin56-2.jpg",
+            "/assets/images/collections/berlin56/berlin56-2-c.jpg",
             "/assets/images/collections/berlin56/berlin56-3.jpg"
         ],
         texts: [
@@ -108,7 +108,7 @@ function updateLink() {
 
     setTimeout(() => {
         const col = collections[currentCollectionIndex];
-        linkEl.innerHTML = `<a href="/collections/${col.file}.html" target="_blank">${col.name}</a>`;
+        linkEl.innerHTML = `<a href="/collections/${col.file}.html">${col.name}</a>`;
         linkEl.classList.remove("fade-out");
     }, 200);
 }
@@ -160,6 +160,20 @@ squareNextBtn.addEventListener("click", () => {
 // -----------------------------
 switchCollection(0); // starts first collection
 
+// clicking on hero border area / image opens specific collection
+
+const heroBorder = document.querySelector(".hero-border");
+
+heroBorder.style.cursor = "pointer";
+
+heroBorder.addEventListener("click", () => {
+    const col = collections[currentCollectionIndex];
+    window.location.href = `/collections/${col.file}.html`;
+});
+
+
+
+
 // banner
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -181,6 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
         images.forEach(src => {
             const img = document.createElement("img");
             img.src = src;
+            img.style.userSelect = "none";
+            img.style.pointerEvents = "none";
+            img.addEventListener("dragstart", (e) => e.preventDefault());
             seq.appendChild(img);
         });
 
@@ -196,6 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
     container.scrollTop = container.querySelector(".sequence").offsetHeight;
 
     // Drag & momentum
+    let isMouseDown = false;
     let isDragging = false;
     let startY = 0;
     let scrollStart = 0;
@@ -203,27 +221,36 @@ document.addEventListener("DOMContentLoaded", () => {
     let lastY = 0;
     let momentumID;
     let isMomentumActive = false;
+    const DRAG_THRESHOLD = 1;
 
     // Auto-scroll speed
-    const AUTO_SCROLL_SPEED = 60; // pixels per second
+    const AUTO_SCROLL_CYCLE_TIME = 29900; // milliseconds to scroll through one sequence height
     let lastTime = performance.now();
 
     container.addEventListener("mousedown", e => {
-        isDragging = true;
+        isMouseDown = true;
         startY = e.pageY;
         scrollStart = container.scrollTop;
         lastY = e.pageY;
         velocity = 0;
-        container.style.cursor = "grabbing";
 
         if (momentumID) cancelAnimationFrame(momentumID);
     });
 
     container.addEventListener("mousemove", e => {
-        if (!isDragging) return;
-        e.preventDefault();
+        if (!isMouseDown) return;
 
         const dy = e.pageY - startY;
+
+        // Start drag if threshold exceeded
+        if (!isDragging && Math.abs(dy) > DRAG_THRESHOLD) {
+            isDragging = true;
+            container.style.cursor = "grabbing";
+        }
+
+        if (!isDragging) return;
+
+        e.preventDefault();
         container.scrollTop = scrollStart - dy;
 
         velocity = e.pageY - lastY;
@@ -232,21 +259,21 @@ document.addEventListener("DOMContentLoaded", () => {
         handleInfiniteScroll();
     });
 
-    container.addEventListener("mouseup", () => {
-        if (isDragging) {
-            isDragging = false;
-            container.style.cursor = "grab";
-            applyMomentum();
-        }
-    });
+    function stopDrag() {
+        if (!isMouseDown) return;
 
-    container.addEventListener("mouseleave", () => {
+        isMouseDown = false;
+
         if (isDragging) {
             isDragging = false;
-            container.style.cursor = "grab";
             applyMomentum();
         }
-    });
+
+        container.style.cursor = "grab";
+    }
+
+    container.addEventListener("mouseup", stopDrag);
+    container.addEventListener("mouseleave", stopDrag);
 
     container.addEventListener("wheel", e => {
         e.preventDefault();
@@ -272,14 +299,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const sequences = Array.from(container.querySelectorAll(".sequence"));
         if (sequences.length !== CLONE_COUNT) return;
 
-        const firstSeqHeight = sequences[0].offsetHeight;
+        const firstSeqHeight = Math.round(sequences[0].getBoundingClientRect().height);
 
         if (container.scrollTop >= firstSeqHeight * 2) {
-            container.scrollTop -= firstSeqHeight;
+            container.scrollTop = Math.round(container.scrollTop - firstSeqHeight);
         }
 
         if (container.scrollTop <= 0) {
-            container.scrollTop += firstSeqHeight;
+            container.scrollTop = Math.round(container.scrollTop + firstSeqHeight);
         }
     }
 
@@ -288,10 +315,11 @@ document.addEventListener("DOMContentLoaded", () => {
         lastTime = currentTime;
 
         if (!isDragging && !isMomentumActive) {
-            // Calculate current first sequence height dynamically
+            // Calculate scroll speed proportional to sequence height
             const seqHeight = container.querySelector(".sequence").offsetHeight;
-            // Scale scroll by current height
-            container.scrollTop += (AUTO_SCROLL_SPEED * deltaTime) / -1000;
+            // Scroll through one full sequence height in AUTO_SCROLL_CYCLE_TIME milliseconds
+            const scrollPerMs = seqHeight / AUTO_SCROLL_CYCLE_TIME;
+            container.scrollTop -= scrollPerMs * deltaTime;
             handleInfiniteScroll();
         }
 

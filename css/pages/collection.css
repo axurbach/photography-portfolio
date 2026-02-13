@@ -1,11 +1,9 @@
 .collection-title {
     display: flex;
-	transform: translateY(5vh);
     width: 100%;
     align-self: center;
     justify-content: center;
-    border-top: black solid 1px;
-    padding-top: 1rem;
+    transition: opacity 0.6s ease; /* default visible state */
 }
 
 .collection-nav {
@@ -15,11 +13,48 @@
 	align-items: center;
 	flex-direction: row;
 	z-index: 4;
-	transform: translateY(10vh);
 	padding-left: 2vh;
 	padding-right: 2vh;
+    padding-top: 1rem;
     padding-bottom: 1rem;
-    border-bottom: black solid 1px;
+}
+
+.collection-prev {
+    cursor: pointer;
+    padding-right: 1.5rem;
+}
+
+.collection-next {
+    cursor: pointer;
+    padding-left: 1.5rem;
+}
+
+.collection-nav.top {
+    border-top: solid black 1px;
+}
+
+.collection-nav.bottom {
+    border-bottom: solid black 1px;
+}
+
+.read-story {
+    cursor: pointer;
+}
+
+.collection-desc {
+    max-height: 0;               /* collapsed by default */
+    overflow: hidden;
+    transition: max-height 0.5s ease, margin 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+    opacity: 0;
+    margin-top: 0;
+    padding: 0;
+}
+
+.collection-desc.show {
+    max-height: 500px;           /* adjust for paragraph length */
+    opacity: 1;
+    margin-top: 1rem;
+    padding: 0.5rem 0;
 }
 
 .scroll-container {
@@ -28,11 +63,10 @@
     display: flex;
     flex-direction: row;
     overflow: hidden; /* hide scrollbars */
-    cursor: grab;
+    cursor: pointer;
     user-select: none; /* prevent text selection */
 	align-self: flex-start;
 	z-index: 2;
-	transform: translateY(7.5vh);
 	background-color: black;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
@@ -47,23 +81,4 @@
 .scroll-container img {
     display: block;
 }
-
-.film-strip {
-    display: flex;
-    flex-direction: row;
-    will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-}
-
-.film-strip img {
-    height: 100%;
-    max-height: 40vh;          /* keeps images contained */
-    width: auto;
-    object-fit: contain;
-    flex-shrink: 0;            /* CRITICAL */
-    user-select: none;
-    pointer-events: none;      /* no drag ghosting */
-}
-
 
