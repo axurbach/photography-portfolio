@@ -16,6 +16,7 @@ html {
 body {
     font-family: "Alte Haas Grotesk", sans-serif;
     overflow-y: hidden;
+    line-height: 1.2;
 }
 
 a {
@@ -59,4 +60,15 @@ button:hover {
 
 .js-hidden {
     opacity: 0;
+}
+
+/* tablet styles */
+
+@media screen and (max-width: 1024px) {
+    body {
+        font-family: "Alte Haas Grotesk", sans-serif;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
 }

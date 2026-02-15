@@ -15,7 +15,7 @@ const collections = [
             "/assets/images/collections/bassvictim/bassvictim-7.jpg"
         ],
         texts: [
-            [ "Bass Victim paragraph 1 line 1", "Bass Victim paragraph 1 line 2" ],
+            [ "Bass Victim paragraph 1 line 1 line 1Bass Victim paragraph 1 line 1", "Bass Victim paragraph 1 line 1 line 1Bass Victim paragraph 1 line 1" ],
             [ "Bass Victim paragraph 2 line 1", "Bass Victim paragraph 2 line 2" ],
             [ "Bass Victim paragraph 3 line 1", "Bass Victim paragraph 3 line 2" ]
         ]

@@ -16,3 +16,7 @@
   padding-right: 1.5rem;
 }
 
+/*-------------- tablet styles --------------*/
+@media screen and (max-width: 1024px) {
+  
+}
