@@ -3,82 +3,94 @@
     width: 100%;
     align-self: center;
     justify-content: center;
-    transition: opacity 0.6s ease; /* default visible state */
+    transition: opacity 0.6s ease;
 }
 
 .collection-nav {
-	display: flex;
-	width: 100%;
-	justify-content: space-between;
-	align-items: center;
-	flex-direction: row;
-	z-index: 4;
-	padding-left: 2vh;
-	padding-right: 2vh;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 4;
+    padding: 1rem 2vh;
 }
 
-.collection-prev {
-    cursor: pointer;
-    padding-right: 1.5rem;
-}
-
-.collection-next {
-    cursor: pointer;
-    padding-left: 1.5rem;
-}
-
-.collection-nav.top {
-    border-top: solid black 1px;
-}
-
-.collection-nav.bottom {
-    border-bottom: solid black 1px;
-}
-
+.collection-prev,
+.collection-next,
 .read-story {
     cursor: pointer;
 }
 
+.collection-prev {
+    padding-right: 1.5rem;
+}
+
+.collection-next {
+    padding-left: 1.5rem;
+}
+
+.collection-nav.top {
+    border-top: 1px solid black;
+}
+
+.collection-nav.bottom {
+    border-bottom: 1px solid black;
+}
+
+/*-------------- expandable description --------------*/
 .collection-desc {
-    max-height: 0;               /* collapsed by default */
+    max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s ease, margin 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
     opacity: 0;
     margin-top: 0;
     padding: 0;
+    transition: 
+        max-height 0.5s ease,
+        margin 0.5s ease,
+        padding 0.5s ease,
+        opacity 0.5s ease;
 }
 
 .collection-desc.show {
-    max-height: 500px;           /* adjust for paragraph length */
+    max-height: 500px; /* limit description height to prevent layout shift */
     opacity: 1;
     margin-top: 1rem;
     padding: 0.5rem 0;
+    text-align: center;
 }
 
+/* scrollable image strip - manual scrolling with grab cursor */
 .scroll-container {
     width: 100%;
-    height: 50%; /* or whatever height you want */
+    height: 50%;
     display: flex;
     flex-direction: row;
-    overflow: hidden; /* hide scrollbars */
-    cursor: pointer;
-    user-select: none; /* prevent text selection */
-	align-self: flex-start;
-	z-index: 2;
-	background-color: black;
-	padding-top: 1rem;
-	padding-bottom: 1rem;
+    overflow: hidden;
+    align-self: flex-start;
+    z-index: 2;
+
+    cursor: grab; /* visual feedback for draggable container */
+    user-select: none;
+
+    background-color: black;
+    padding: 1rem 0;
 }
 
 .scroll-container img {
+    display: block;        /* prevent inline gaps */
     height: 100%;
-    pointer-events: none; /* prevent drag ghost image */
+    pointer-events: none;  /* disable default drag behavior */
+    user-select: none;
 }
 
-/* ensure images don't introduce inline-gap/layout shifts */
-.scroll-container img {
-    display: block;
-}
+/*-------------- tablet + mobile styles (≤1024px) --------------*/
+@media screen and (max-width: 1024px) {
+    .scroll-container {
+        height: 30vh; /* smaller on mobile for better space usage */
+    }
 
+    .collection-desc.show {
+        padding: 0.5rem 1rem;
+    }
+}

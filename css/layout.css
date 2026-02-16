@@ -1,93 +1,102 @@
+/* CSS variables */
+:root {
+    --z-header-footer: 50;
+    --z-dev-ruler: 9999;
+    --gap-default: 1rem;
+    --padding-small: 0.5rem;
+    --padding-default: 1rem;
+}
+
+/* header */
 .header {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 50;
+    z-index: var(--z-header-footer);
+
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem;
+    padding: var(--padding-small) var(--padding-default);
 }
 
-.header-left {
-    flex: 1; /* takes up left space */
+.header-left,
+.header-right {
+    flex: 1;
 }
 
 .header-center {
-    flex: 0; /* doesn’t grow */
+    flex: 0;
     text-align: center;
 }
 
-/* center link padding */
-.header-center a {
-    padding: 0 0.5rem;
-}
-
 .header-right {
-    flex: 1; /* takes up right space */
     text-align: right;
 }
 
+/* header link spacing */
+.header-center a,
 .header-right a {
-    padding: 0 0.5rem;
+    padding: 0 calc(var(--padding-default) / 2);
 }
 
 /* main layout */
 .main {
     width: 100%;
     height: 100vh;
+
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* homepage layout */
-.home-content {
-    width: 100%;
-    height: 60%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly; /* centers square column */
-    align-items: center;
-}
-
-/* about page layout */
+/* page-specific layouts */
+/* home and about pages use similar layouts */
+.home-content,
 .about-content {
     width: 100%;
     height: 60%;
+
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly; /* centers square column */
+    justify-content: space-evenly; /* distribute items evenly */
     align-items: center;
 }
 
+/* contact page: centered column layout */
 .contact-content {
     width: 100%;
     height: 60%;
+
     display: flex;
     flex-direction: column;
-    justify-content: center; /* centers square column */
+    justify-content: center;
     align-items: center;
 }
 
+/* collection page: centered with slight downward offset */
 .collection-content {
     width: 100%;
     height: 60%;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    transform: translateY(10%);
+
+    transform: translateY(10%); /* offset for visual balance */
 }
 
-/* Footer */
+/* footer */
 .footer {
     position: fixed;
     bottom: 0;
     width: 100%;
-    z-index: 50;
+    z-index: var(--z-header-footer);
+
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 0.5rem 1rem;
+
+    padding: var(--padding-small) var(--padding-default);
 }
 
 .footer-center-right {
@@ -100,9 +109,12 @@
     text-align: right;
 }
 
-/* tablet styles */
+/*-------------- tablet styles (≤1024px) --------------*/
 @media screen and (max-width: 1024px) {
-    html, body {
+    /* switch to flexible column layout for narrower screens */
+
+    html,
+    body {
         height: 100%;
     }
 
@@ -114,112 +126,104 @@
     .main {
         flex: 1;
         height: auto;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
     .header {
         position: relative;
-        top: 0;
-        width: 100%;
-        z-index: 50;
-        display: flex;
-        align-items: center;
-        padding: 1rem 1rem;
+        padding: var(--padding-default);
         background-color: white;
     }
 
-    .home-content {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem 0;
-    }
-
+    .home-content,
+    .home-content,
     .about-content {
         width: 100%;
         height: auto;
-        display: flex;
+
         flex-direction: column;
-        justify-content: space-evenly; 
         align-items: center;
+    }
+
+    .home-content {
+        justify-content: flex-start;
+        gap: var(--gap-default);
+        padding: var(--gap-default) 0;
+    }
+
+    .about-content {
+        justify-content: space-evenly;
     }
 
     .contact-content {
         height: auto;
     }
 
+    .collection-content {
+        width: 100%;
+        height: auto;
+        transform: translateY(0);
+    }
+
     .footer {
         position: relative;
-        bottom: 0;
-        width: 100%;
-        z-index: 50;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        align-self: flex-end;
-        padding: 0.5rem 1rem;
         background-color: white;
     }
-
 }
 
+/*-------------- mobile styles (≤767px) --------------*/
 @media screen and (max-width: 767px) {
+    /* stack everything vertically and optimize spacing for small screens */
+
     .home-content {
-        gap: 0.5rem;
-        padding: 0.5rem 0;
+        gap: calc(var(--gap-default) / 2);
+        padding: calc(var(--gap-default) / 2) 0;
     }
 
-    /* mobile: place .footer-center-right on the left of the viewport, overlaying footer */
     .footer {
         position: relative;
         overflow: visible;
-        display: grid; /* top: above text; bottom: three columns */
+
+        display: grid;
         grid-template-columns: 1fr auto 1fr;
         grid-template-rows: auto auto;
         align-items: center;
+
         gap: 0.25rem;
         padding: 0.5rem 1rem;
     }
 
-    /* make the center-right block span the full width on the first row */
+    /* Top Row */
     .footer-center-right {
-        position: static;
         grid-column: 1 / -1;
         grid-row: 1;
+
         display: flex;
         flex-direction: column;
         text-align: left;
-        padding: 0;
+
         margin-bottom: 1rem;
     }
 
-    /* place the other footer items on the second row in three columns */
+    /* Bottom Row */
     .footer-left {
         grid-column: 1;
         grid-row: 2;
         justify-self: start;
-        align-self: end; /* align to bottom of its grid cell */
+        align-self: end;
     }
 
     .footer-center-left {
         grid-column: 2;
         grid-row: 2;
         justify-self: center;
-        align-self: end; /* align to bottom of the row to match wrapped left text */
+        align-self: end;
     }
 
     .footer-right {
         grid-column: 3;
         grid-row: 2;
         justify-self: end;
+        align-self: end;
         text-align: right;
-        align-self: end; /* align to bottom of the row to match wrapped left text */
     }
 }

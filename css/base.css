@@ -1,4 +1,16 @@
-/* Reset */
+/* CSS variables */
+:root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-selection-bg: #000;
+    --color-selection-text: #fff;
+    --color-tap-highlight: rgba(0, 0, 0, 0.1);
+    --transition-default: 0.3s ease;
+    --font-primary: "Alte Haas Grotesk", sans-serif;
+    --line-height: 1.2;
+}
+
+/* reset */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,7 +18,7 @@
 }
 
 html, body {
-    background-color: #fff;
+    background-color: var(--color-bg);
 }
 
 html {
@@ -14,9 +26,14 @@ html {
 }
 
 body {
-    font-family: "Alte Haas Grotesk", sans-serif;
+    font-family: var(--font-primary);
     overflow-y: hidden;
-    line-height: 1.2;
+    line-height: var(--line-height);
+}
+
+a,
+button {
+    -webkit-tap-highlight-color: var(--color-tap-highlight);
 }
 
 a {
@@ -24,21 +41,22 @@ a {
     text-decoration: none;
 }
 
-/* Global button reset to look like links */
+/* global button reset to look like links */
 button {
-    background: none;         /* remove default button background */
-    border: none;             /* remove default button border */
-    font-style: none;
-    color: inherit;           /* inherit your text/link color */
-    font: inherit;            /* inherit font style from parent */
-    cursor: pointer;          /* pointer on hover */
-    padding: 0;               /* remove default padding */
-    transition: color 0.3s;   /* smooth hover color transition */
+    background: none;       
+    border: none;           
+    color: inherit;           
+    font: inherit;            
+    cursor: pointer;        
+    padding: 0;             
+    transition: color var(--transition-default);
 }
 
-/* Hover effect to match links */
-button:hover {
-    color: rgb(0, 0, 0); 
+/* accessibility: visible focus for keyboard navigation */
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
 }
 
 .header,
@@ -48,22 +66,21 @@ button:hover {
 
 /* global selection style */
 ::selection {
-    background-color: #000; 
-    color: #fff;           
+    background-color: var(--color-selection-bg);
+    color: var(--color-selection-text);
 }
 
-/* for firefox (uses ::-moz-selection) */
+/* firefox selection support */
 ::-moz-selection {
-    background-color: #000;
-    color: #fff;
+    background-color: var(--color-selection-bg);
+    color: var(--color-selection-text);
 }
 
 .js-hidden {
     opacity: 0;
 }
 
-/* tablet styles */
-
+/* tablet + mobile styles */
 @media screen and (max-width: 1024px) {
     body {
         font-family: "Alte Haas Grotesk", sans-serif;
