@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-// ------------ image data for each collection ------------
-
     const collectionImages = {
         "/collections/bassvictim.html": [
             "/assets/images/collections/bassvictim/bassvictim-1.jpg",
@@ -22,16 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
         ]
     };
 
-    // get images for this page
     const currentPage = window.location.pathname;
     const images = collectionImages[currentPage] || [];
-
     const container = document.querySelector(".scroll-container");
     const IMAGE_GAP_REM = 1;
     const CLONE_COUNT = 4;
     const DRAG_THRESHOLD = 1;
-
-// ------------ create sequence ------------
 
     function createSequence() {
         const seq = document.createElement("div");
@@ -54,37 +47,27 @@ document.addEventListener("DOMContentLoaded", () => {
         container.appendChild(createSequence());
     }
 
-    // start near the middle
     container.scrollLeft = container.scrollWidth / 2;
     container.style.cursor = "pointer";
     container.style.touchAction = "pan-y";
 
-// ------------ drag & momentum state ------------
-    let isMouseDown = false;
-    let isDragging = false;
-    let startX = 0;
-    let scrollStart = 0;
-    let velocity = 0;
-    let lastX = 0;
-    let momentumID;
+    // drag & momentum
+    let isMouseDown = false, isDragging = false;
+    let startX = 0, scrollStart = 0, velocity = 0, lastX = 0, momentumID;
 
-    // ------------ overlay / lightbox ------------
-
+    // overlay / lightbox
     const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.inset = 0;
-    overlay.style.backgroundColor = "rgba(0,0,0,0.8)";
-    overlay.style.display = "none";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.zIndex = "9999";
+    overlay.style.cssText = `
+        position: fixed; inset: 0; display: none; 
+        align-items: center; justify-content: center; 
+        background: rgba(0,0,0,0.8); z-index: 9999;
+    `;
 
     const overlayImg = document.createElement("img");
-    overlayImg.style.maxWidth = "75%";
-    overlayImg.style.maxHeight = "75%";
-    overlayImg.style.cursor = "zoom-out";
-    overlayImg.style.userSelect = "none";
-    overlayImg.style.webkitUserSelect = "none";
+    overlayImg.style.cssText = `
+        max-width: 75%; max-height: 75%; cursor: zoom-out; 
+        user-select: none; -webkit-user-select: none; 
+    `;
     overlayImg.draggable = false;
     overlay.appendChild(overlayImg);
     document.body.appendChild(overlay);
@@ -114,16 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
         overlayImg.onload = updateOverlayImageSize;
         overlay.style.display = "flex";
         overlayJustOpenedUntil = Date.now() + 150;
-
-        // center image center with scroll container center
-        const scrollContainerRect = container.getBoundingClientRect();
-        const scrollContainerCenter = scrollContainerRect.top + scrollContainerRect.height / 2;
-        const viewportCenter = window.innerHeight / 2;
-        const offsetFromCenter = scrollContainerCenter - viewportCenter;
-
-        overlay.style.alignItems = "center";
-        overlay.style.justifyContent = "center";
-        overlayImg.style.transform = `translateY(${offsetFromCenter}px)`;
     }
 
     function hideOverlay() {
@@ -140,26 +113,19 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.key === "Escape") hideOverlay();
     });
 
-    // ------------ pointer logic for click vs drag ------------
-
-    let pointerDownX = 0;
-    let pointerDownY = 0;
-    let activePointerId = null;
-    let pointerDownImg = null;
-    const CLICK_THRESHOLD = 20; // pixels
+    // pointer logic
+    let pointerDownX = 0, pointerDownY = 0, activePointerId = null, pointerDownImg = null;
+    const CLICK_THRESHOLD = 20;
 
     container.addEventListener("pointerdown", e => {
         if (e.pointerType === "mouse" && e.button !== 0) return;
-
         activePointerId = e.pointerId;
         container.setPointerCapture(activePointerId);
-
         isMouseDown = true;
         startX = e.pageX;
         scrollStart = container.scrollLeft;
         lastX = e.pageX;
         velocity = 0;
-
         if (momentumID) cancelAnimationFrame(momentumID);
 
         pointerDownX = e.clientX;
@@ -168,16 +134,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     container.addEventListener("pointermove", e => {
-        if (!isMouseDown) return;
-        if (activePointerId !== null && e.pointerId !== activePointerId) return;
-
+        if (!isMouseDown || (activePointerId !== null && e.pointerId !== activePointerId)) return;
         const dx = e.pageX - startX;
-
         if (!isDragging && Math.abs(dx) > DRAG_THRESHOLD) {
             isDragging = true;
             container.style.cursor = "grabbing";
         }
-
         if (!isDragging) return;
 
         e.preventDefault();
@@ -191,7 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function stopInteraction(e) {
         if (!isMouseDown) return;
         isMouseDown = false;
-
         if (activePointerId !== null) {
             container.releasePointerCapture(activePointerId);
             activePointerId = null;
@@ -205,14 +166,12 @@ document.addEventListener("DOMContentLoaded", () => {
             isDragging = false;
             applyMomentum();
         } else if (movedDistance <= CLICK_THRESHOLD) {
-            // only trigger overlay for a true tap/click
             if (pointerDownImg && container.contains(pointerDownImg)) {
                 showOverlay(pointerDownImg.src);
             }
         }
 
         pointerDownImg = null;
-
         container.style.cursor = "pointer";
     }
 
@@ -226,25 +185,18 @@ document.addEventListener("DOMContentLoaded", () => {
         handleInfiniteScroll();
     });
 
-    // ------------ momentum ------------
-
+    // momentum & infinite scroll
     function applyMomentum() {
         velocity *= 0.95;
-
         if (Math.abs(velocity) < 0.5) return;
-
         container.scrollLeft -= velocity;
         handleInfiniteScroll();
-
         momentumID = requestAnimationFrame(applyMomentum);
     }
-
-    // ------------ infinite scroll ------------
 
     function handleInfiniteScroll() {
         const sequences = Array.from(container.querySelectorAll(".sequence"));
         if (!sequences.length) return;
-
         const first = sequences[0];
         const last = sequences[sequences.length - 1];
         const containerRect = container.getBoundingClientRect();
@@ -254,52 +206,9 @@ document.addEventListener("DOMContentLoaded", () => {
             container.appendChild(first);
             container.scrollLeft -= seqWidth;
         }
-
         if (last.getBoundingClientRect().left > containerRect.right) {
             container.insertBefore(last, first);
             container.scrollLeft += seqWidth;
         }
     }
-
-    // ------------ read story logic ------------
-
-    const readBtn = document.querySelector(".read-story");
-    const extraContent = document.querySelector(".collection-desc");
-
-    readBtn.addEventListener("click", () => {
-        extraContent.classList.toggle("show");
-
-        if (extraContent.classList.contains("show")) {
-            readBtn.textContent = "hide story";
-        } else {
-            readBtn.textContent = "read story";
-        }
-
-        extraContent.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-
-    // ------------ collection page navigation ------------
-
-    const collectionPages = [
-        "/collections/bassvictim.html",
-        "/collections/berlin56.html"
-    ];
-
-    let currentIndex = collectionPages.indexOf(currentPage);
-    if (currentIndex === -1) currentIndex = 0;
-
-    document.querySelectorAll(".collection-prev").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const prevIndex = (currentIndex - 1 + collectionPages.length) % collectionPages.length;
-            window.location.href = collectionPages[prevIndex];
-        });
-    });
-
-    document.querySelectorAll(".collection-next").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const nextIndex = (currentIndex + 1) % collectionPages.length;
-            window.location.href = collectionPages[nextIndex];
-        });
-    });
-
 });
