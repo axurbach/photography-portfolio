@@ -136,8 +136,10 @@
         height: auto;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly; ;
-        align-self: flex-start;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 0;
     }
 
     .about-content {
@@ -147,6 +149,10 @@
         flex-direction: column;
         justify-content: space-evenly; 
         align-items: center;
+    }
+
+    .contact-content {
+        height: auto;
     }
 
     .footer {
@@ -165,6 +171,11 @@
 }
 
 @media screen and (max-width: 767px) {
+    .home-content {
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+    }
+
     /* mobile: place .footer-center-right on the left of the viewport, overlaying footer */
     .footer {
         position: relative;

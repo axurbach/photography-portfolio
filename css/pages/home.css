@@ -179,7 +179,7 @@
         height: 70vw;
         max-width: 500px;
         max-height: 500px;
-        margin-top: 15%;
+        margin-top: 7rem;
         order: 1;
     }
 
@@ -202,7 +202,9 @@
         gap: 1rem;
         height: auto;
         max-height: none;
+        min-height: 250px;
         aspect-ratio: unset;
+        padding-bottom: 4rem;
     }
 
     .info {
@@ -235,12 +237,7 @@
     }
 
     .banner-wrapper {
-        rotate: -90deg;
-        align-self: center;
-        width: auto;
-        height: 70vw;
-        max-height: 500px;
-        order: 3;
+        display: none;
     }
 }
 
@@ -288,21 +285,5 @@
     #info-text p {
         margin: 0;
         text-align: left;
-    }
-
-    .loading-ring {
-        width: 40px;
-        flex-direction: column;
-        align-self: center;
-        order: 1;
-    }
-
-    .banner-wrapper {
-        rotate: -90deg;
-        align-self: center;
-        width: auto;
-        height: 85vw;
-        max-height: 500px;
-        order: 3;
     }
 }
