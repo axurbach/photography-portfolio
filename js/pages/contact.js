@@ -6,18 +6,18 @@ const contactForm = document.querySelector('.contact-form');
 contactForm.addEventListener('submit', async function(e) {
     e.preventDefault(); // prevent page reload
 
-    // Get values
+    // get values
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
     const message = document.getElementById('message').value.trim();
 
-    // Basic validation
+    // basic validation
     if (!name || !email || !message) {
         alert('Please fill in all fields.');
         return;
     }
 
-    // Prepare FormData
+    // prepare FormData
     const formData = new FormData(contactForm);
 
     try {
@@ -30,15 +30,15 @@ contactForm.addEventListener('submit', async function(e) {
         });
 
         if (response.ok) {
-            // Success: show message and reset form
+            // success: show message and reset form
             alert(`Thanks, ${name}! Your message has been sent.`);
             contactForm.reset();
         } else {
-            // Server error
+            // server error
             alert('Oops! There was a problem submitting your message.');
         }
     } catch (error) {
-        // Network error
+        // network error
         alert('Oops! Network error. Please try again.');
     }
 });
@@ -47,7 +47,7 @@ contactForm.addEventListener('submit', async function(e) {
 
 const links = [
     { text: "email :: axurbach@gmail.com", href: "mailto:axurbach@gmail.com" },
-    // { text: "linkedin :: linkedin.com/in/username", href: "https://linkedin.com/in/username" },
+    // (add later) { text: "linkedin :: linkedin.com/in/username", href: "https://linkedin.com/in/username" },
     { text: "instagram :: @17099450a", href: "https://instagram.com/17099450a" }
 ];
 
@@ -57,15 +57,15 @@ const prevBtn = document.getElementById('contact-prev');
 const nextBtn = document.getElementById('contact-next');
 
 function updateLink(index) {
-    // Fade out
+    // fade out
     linkEl.classList.add('fade-out');
 
     setTimeout(() => {
-        // Update text and href
+        // update text and href
         linkEl.innerHTML = links[index].text.replace(/:: (.+)/, `:: <a href="${links[index].href}" target="_blank">$1</a>`);
-        // Fade back in
+        // fade back in
         linkEl.classList.remove('fade-out');
-    }, 500); // match transition duration
+    }, 500);
 }
 
 prevBtn.addEventListener('click', () => {

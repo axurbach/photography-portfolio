@@ -1,10 +1,7 @@
 let isInitialLoad = true;
 
-// -----------------------------
-// Homepage Slideshow + Collection Nav
-// -----------------------------
+// ------------ homepage slideshow + collection nav ------------
 
-// 1️⃣ Collections with their images
 const collections = [
     {
         file: "bassvictim",
@@ -36,7 +33,7 @@ const collections = [
     }
 ];
 
-// 2️⃣ DOM elements
+// dom elements
 const imageElement = document.getElementById("hero-image");
 const overlay = document.querySelector(".tech-overlay");
 const ring = document.querySelector(".ring-progress");
@@ -45,15 +42,14 @@ const linkEl = document.getElementById("square-link");
 const squarePrevBtn = document.getElementById("square-prev");
 const squareNextBtn = document.getElementById("square-next");
 
-// 3️⃣ State
+// state
 let currentCollectionIndex = 0;
 let currentImageIndex = 0;
 const duration = 7000;
 let slideshowInterval = null;
 
-// -----------------------------
-// Ring progress
-// -----------------------------
+// ------------ ring progress ------------
+
 function startProgress() {
     ring.style.transition = "none";
     ring.style.strokeDashoffset = "100";
@@ -62,10 +58,9 @@ function startProgress() {
     ring.style.strokeDashoffset = "0";
 }
 
-// -----------------------------
-// Update the paragraph / text
-// -----------------------------
-const paragraphEl = document.getElementById("info-text"); // make sure you have this in HTML
+// ------------ update paragraphs ------------
+
+const paragraphEl = document.getElementById("info-text"); 
 
 function updateText() {
     const col = collections[currentCollectionIndex];
@@ -75,13 +70,12 @@ function updateText() {
         const paragraphs = col.texts[currentImageIndex] || [];
         paragraphEl.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join("");
         paragraphEl.classList.remove("fade-out");
-    }, 400); // match your fade timing
+    }, 400); 
 }
 
 
-// -----------------------------
-// Show next image in current collection
-// -----------------------------
+// ------------ show next image in current collection ------------
+
 function showNextImage() {
     const images = collections[currentCollectionIndex].images;
 
@@ -100,9 +94,8 @@ function showNextImage() {
     }, 500);
 }
 
-// -----------------------------
-// Update the square nav link
-// -----------------------------
+// ------------ update square nav link ------------
+
 function updateLink() {
     linkEl.classList.add("fade-out");
 
@@ -113,9 +106,8 @@ function updateLink() {
     }, 200);
 }
 
-// -----------------------------
-// Switch collection manually
-// -----------------------------
+// ------------ switch collection manually ------------
+
 function switchCollection(index) {
     currentCollectionIndex = index;
     currentImageIndex = 0;
@@ -141,10 +133,8 @@ function switchCollection(index) {
     isInitialLoad = false;
 }
 
+// ------------ square nav buttons ------------
 
-// -----------------------------
-// Square nav buttons
-// -----------------------------
 squarePrevBtn.addEventListener("click", () => {
     const newIndex = (currentCollectionIndex - 1 + collections.length) % collections.length;
     switchCollection(newIndex);
@@ -155,9 +145,8 @@ squareNextBtn.addEventListener("click", () => {
     switchCollection(newIndex);
 });
 
-// -----------------------------
-// Initialize
-// -----------------------------
+// ------------ initialize ------------
+
 switchCollection(0); // starts first collection
 
 // clicking on hero border area / image opens specific collection
@@ -171,10 +160,7 @@ heroBorder.addEventListener("click", () => {
     window.location.href = `/collections/${col.file}.html`;
 });
 
-
-
-
-// banner
+// ------------ banner ------------
 
 document.addEventListener("DOMContentLoaded", () => {
     const images = [
@@ -204,15 +190,15 @@ document.addEventListener("DOMContentLoaded", () => {
         return seq;
     }
 
-    // Add sequences
+    // add sequences
     for (let i = 0; i < CLONE_COUNT; i++) {
         container.appendChild(createSequence());
     }
 
-    // Start in middle
+    // start in middle
     container.scrollTop = container.querySelector(".sequence").offsetHeight;
 
-    // Drag & momentum
+    // drag & momentum
     let isMouseDown = false;
     let isDragging = false;
     let startY = 0;
@@ -223,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let isMomentumActive = false;
     const DRAG_THRESHOLD = 1;
 
-    // Auto-scroll speed
+    // auto-scroll speed
     const AUTO_SCROLL_CYCLE_TIME = 29900; // milliseconds to scroll through one sequence height
     let lastTime = performance.now();
 
@@ -242,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const dy = e.pageY - startY;
 
-        // Start drag if threshold exceeded
+        // start drag if threshold exceeded
         if (!isDragging && Math.abs(dy) > DRAG_THRESHOLD) {
             isDragging = true;
             container.style.cursor = "grabbing";
@@ -315,9 +301,9 @@ document.addEventListener("DOMContentLoaded", () => {
         lastTime = currentTime;
 
         if (!isDragging && !isMomentumActive) {
-            // Calculate scroll speed proportional to sequence height
+            // calculate scroll speed proportional to sequence height
             const seqHeight = container.querySelector(".sequence").offsetHeight;
-            // Scroll through one full sequence height in AUTO_SCROLL_CYCLE_TIME milliseconds
+            // scroll through one full sequence height in AUTO_SCROLL_CYCLE_TIME milliseconds
             const scrollPerMs = seqHeight / AUTO_SCROLL_CYCLE_TIME;
             container.scrollTop -= scrollPerMs * deltaTime;
             handleInfiniteScroll();

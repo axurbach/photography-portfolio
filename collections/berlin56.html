@@ -3,7 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photography Portfolio</title>
+    <meta name="description" content="collection :: berlin56">
+    <meta name="keywords" content="concert photography, live music photography, Ottawa photographer, Montreal photographer, Toronto photographer, music events, Alexander Urbach, 17099450a">
+    <meta name="author" content="alexander urbach">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- open graph / facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="17099450a">
+    <meta property="og:description" content="collection :: berlin56">
+    <meta property="og:image" content="/assets/images/collections/berlin56/berlin56-1.jpg">
+    <meta property="og:url" content="https://17099450a.com/collections/berlin56.html">
+    
+    <!-- twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="17099450a">
+    <meta name="twitter:description" content="collection :: berlin56">
+    <meta name="twitter:image" content="/assets/images/collections/berlin56/berlin56-1.jpg">
+    
+    <title>17099450a :: berlin56</title>
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/pages/collection.css">
@@ -15,6 +33,20 @@
     <div class="header-left"><a href="/index.html">17099450a</a></div>
     <div class="header-center"><a href="/index.html">home</a></div>
     <nav class="header-right">
+        <a href="/about.html">about</a>
+        <a href="/contact.html">contact</a>
+    </nav>
+
+    <!-- hamburger menu button -->
+    <button class="hamburger" id="hamburger-btn" aria-label="Open Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- hamburger menu -->
+    <nav class="mobile-menu" id="mobile-menu">
+        <a href="/index.html">home</a>
         <a href="/about.html">about</a>
         <a href="/contact.html">contact</a>
     </nav>
@@ -64,11 +96,12 @@
     <div class="footer-center-right">
         <span>concert photography</span>
         <span>ottawa + montreal + toronto</span>
-        <a href="/contact.html">contact for inquires</a>
+        <a href="/contact.html">contact for inquiries</a>
     </div>
     <div class="footer-right"><a href="/index.html">17099450a</a></div>
 </footer>
-    <script src="/js/core/sec.js"></script>
+    <script src="/js/core/sec.js" defer></script>
+    <script src="/js/core/nav.js" defer></script>
     <script src="/js/pages/collection.js"></script>
 </body>
 </html>

@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // -----------------------------
-    // Image data for each collection
-    // -----------------------------
+// ------------ image data for each collection ------------
+
     const collectionImages = {
         "/collections/bassvictim.html": [
             "/assets/images/collections/bassvictim/bassvictim-1.jpg",
@@ -23,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ]
     };
 
-    // Get images for this page
+    // get images for this page
     const currentPage = window.location.pathname;
     const images = collectionImages[currentPage] || [];
 
@@ -32,9 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const CLONE_COUNT = 4;
     const DRAG_THRESHOLD = 1;
 
-    // -----------------------------
-    // Create sequence
-    // -----------------------------
+// ------------ create sequence ------------
+
     function createSequence() {
         const seq = document.createElement("div");
         seq.classList.add("sequence");
@@ -45,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
             img.src = src;
             img.style.marginRight = IMAGE_GAP_REM + "rem";
             img.style.cursor = "pointer";
+            img.draggable = false;
             seq.appendChild(img);
         });
 
@@ -55,13 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
         container.appendChild(createSequence());
     }
 
-    // Start near the middle
+    // start near the middle
     container.scrollLeft = container.scrollWidth / 2;
     container.style.cursor = "pointer";
+    container.style.touchAction = "pan-y";
 
-    // -----------------------------
-    // Drag & momentum state
-    // -----------------------------
+// ------------ drag & momentum state ------------
     let isMouseDown = false;
     let isDragging = false;
     let startX = 0;
@@ -70,9 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let lastX = 0;
     let momentumID;
 
-    // -----------------------------
-    // Overlay / lightbox
-    // -----------------------------
+    // ------------ overlay / lightbox ------------
+
     const overlay = document.createElement("div");
     overlay.style.position = "fixed";
     overlay.style.inset = 0;
@@ -86,12 +83,47 @@ document.addEventListener("DOMContentLoaded", () => {
     overlayImg.style.maxWidth = "75%";
     overlayImg.style.maxHeight = "75%";
     overlayImg.style.cursor = "zoom-out";
+    overlayImg.style.userSelect = "none";
+    overlayImg.style.webkitUserSelect = "none";
+    overlayImg.draggable = false;
     overlay.appendChild(overlayImg);
     document.body.appendChild(overlay);
 
+    let overlayJustOpenedUntil = 0;
+
+    function updateOverlayImageSize() {
+        const img = overlayImg;
+        const isLandscape = img.naturalWidth > img.naturalHeight;
+        const isMobile = window.innerWidth <= 767;
+
+        if (isMobile && isLandscape) {
+            img.style.maxWidth = "100%";
+            img.style.maxHeight = "75vh";
+            img.style.width = "100%";
+            img.style.height = "auto";
+        } else {
+            img.style.maxWidth = "75%";
+            img.style.maxHeight = "75%";
+            img.style.width = "auto";
+            img.style.height = "auto";
+        }
+    }
+
     function showOverlay(src) {
         overlayImg.src = src;
+        overlayImg.onload = updateOverlayImageSize;
         overlay.style.display = "flex";
+        overlayJustOpenedUntil = Date.now() + 150;
+
+        // center image center with scroll container center
+        const scrollContainerRect = container.getBoundingClientRect();
+        const scrollContainerCenter = scrollContainerRect.top + scrollContainerRect.height / 2;
+        const viewportCenter = window.innerHeight / 2;
+        const offsetFromCenter = scrollContainerCenter - viewportCenter;
+
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlayImg.style.transform = `translateY(${offsetFromCenter}px)`;
     }
 
     function hideOverlay() {
@@ -100,6 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     overlay.addEventListener("click", e => {
+        if (Date.now() < overlayJustOpenedUntil) return;
         if (e.target === overlay || e.target === overlayImg) hideOverlay();
     });
 
@@ -107,22 +140,20 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.key === "Escape") hideOverlay();
     });
 
-    // -----------------------------
-    // Pointer logic for click vs drag
-    // -----------------------------
+    // ------------ pointer logic for click vs drag ------------
+
     let pointerDownX = 0;
     let pointerDownY = 0;
+    let activePointerId = null;
+    let pointerDownImg = null;
     const CLICK_THRESHOLD = 20; // pixels
 
     container.addEventListener("pointerdown", e => {
-        pointerDownX = e.clientX;
-        pointerDownY = e.clientY;
-    });
+        if (e.pointerType === "mouse" && e.button !== 0) return;
 
-    // -----------------------------
-    // Mouse events for drag
-    // -----------------------------
-    container.addEventListener("mousedown", e => {
+        activePointerId = e.pointerId;
+        container.setPointerCapture(activePointerId);
+
         isMouseDown = true;
         startX = e.pageX;
         scrollStart = container.scrollLeft;
@@ -133,10 +164,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         pointerDownX = e.clientX;
         pointerDownY = e.clientY;
+        pointerDownImg = e.target.closest("img");
     });
 
-    container.addEventListener("mousemove", e => {
+    container.addEventListener("pointermove", e => {
         if (!isMouseDown) return;
+        if (activePointerId !== null && e.pointerId !== activePointerId) return;
 
         const dx = e.pageX - startX;
 
@@ -159,31 +192,33 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!isMouseDown) return;
         isMouseDown = false;
 
+        if (activePointerId !== null) {
+            container.releasePointerCapture(activePointerId);
+            activePointerId = null;
+        }
+
+        const movedX = e.clientX - pointerDownX;
+        const movedY = e.clientY - pointerDownY;
+        const movedDistance = Math.hypot(movedX, movedY);
+
         if (isDragging) {
             isDragging = false;
             applyMomentum();
-        } else {
-            // Only trigger overlay if not dragging
-            const allImages = container.querySelectorAll("img");
-            for (const img of allImages) {
-                const rect = img.getBoundingClientRect();
-                if (
-                    pointerDownX >= rect.left &&
-                    pointerDownX <= rect.right &&
-                    pointerDownY >= rect.top &&
-                    pointerDownY <= rect.bottom
-                ) {
-                    showOverlay(img.src);
-                    break;
-                }
+        } else if (movedDistance <= CLICK_THRESHOLD) {
+            // only trigger overlay for a true tap/click
+            if (pointerDownImg && container.contains(pointerDownImg)) {
+                showOverlay(pointerDownImg.src);
             }
         }
+
+        pointerDownImg = null;
 
         container.style.cursor = "pointer";
     }
 
-    container.addEventListener("mouseup", stopInteraction);
-    container.addEventListener("mouseleave", stopInteraction);
+    container.addEventListener("pointerup", stopInteraction);
+    container.addEventListener("pointercancel", stopInteraction);
+    container.addEventListener("pointerleave", stopInteraction);
 
     container.addEventListener("wheel", e => {
         e.preventDefault();
@@ -191,9 +226,8 @@ document.addEventListener("DOMContentLoaded", () => {
         handleInfiniteScroll();
     });
 
-    // -----------------------------
-    // Momentum
-    // -----------------------------
+    // ------------ momentum ------------
+
     function applyMomentum() {
         velocity *= 0.95;
 
@@ -205,9 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
         momentumID = requestAnimationFrame(applyMomentum);
     }
 
-    // -----------------------------
-    // Infinite scroll
-    // -----------------------------
+    // ------------ infinite scroll ------------
+
     function handleInfiniteScroll() {
         const sequences = Array.from(container.querySelectorAll(".sequence"));
         if (!sequences.length) return;
@@ -228,9 +261,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // -----------------------------
-    // Read story logic
-    // -----------------------------
+    // ------------ read story logic ------------
+
     const readBtn = document.querySelector(".read-story");
     const extraContent = document.querySelector(".collection-desc");
 
@@ -246,9 +278,8 @@ document.addEventListener("DOMContentLoaded", () => {
         extraContent.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-    // -----------------------------
-    // Collection page navigation
-    // -----------------------------
+    // ------------ collection page navigation ------------
+
     const collectionPages = [
         "/collections/bassvictim.html",
         "/collections/berlin56.html"

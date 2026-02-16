@@ -52,13 +52,11 @@
 }
 
 /* visual feedback for validation states */
-.contact-form input:invalid {
+.contact-form input:not(:placeholder-shown):invalid,
+.contact-form textarea:not(:placeholder-shown):invalid {
     border-color: #c00;
 }
 
-.contact-form input:valid {
-    border-color: #000;
-}
 
 /* submit button - touch-friendly sizing */
 .contact-form button {

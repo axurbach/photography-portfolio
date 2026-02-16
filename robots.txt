@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://17099450a.com/sitemap.xml
+
+# Disallow archive and development files
+Disallow: /archive/

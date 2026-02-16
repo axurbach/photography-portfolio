@@ -3,13 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="live :: photography">
+    <meta name="keywords" content="concert photography, live music photography, Ottawa photographer, Montreal photographer, Toronto photographer, music events, Alexander Urbach, 17099450a">
+    <meta name="author" content="alexander urbach">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- open graph / facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="17099450a">
+    <meta property="og:description" content="live :: photography">
+    <meta property="og:image" content="/assets/images/collections/bassvictim/bassvictim-1.jpg">
+    <meta property="og:url" content="https://17099450a.com/">
+    
+    <!-- twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="17099450a">
+    <meta name="twitter:description" content="live :: photography">
+    <meta name="twitter:image" content="/assets/images/collections/bassvictim/bassvictim-1.jpg">
+    
     <title>17099450a</title>
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/pages/home.css">
 </head>
-<body class="js-hidden">
 
+<body class="js-hidden">
 <header class="header">
     <div class="header-left"><a href="/index.html">17099450a</a></div>
     <div class="header-center"><a href="/index.html">home</a></div>
@@ -17,63 +35,75 @@
         <a href="/about.html">about</a>
         <a href="/contact.html">contact</a>
     </nav>
+
+    <!-- hamburger menu button -->
+    <button class="hamburger" id="hamburger-btn" aria-label="Open Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- hamburger menu -->
+    <nav class="mobile-menu" id="mobile-menu">
+        <a href="/index.html">home</a>
+        <a href="/about.html">about</a>
+        <a href="/contact.html">contact</a>
+    </nav>
 </header>
 
 <main class="main">
-
     <!-- homepage content wrapper -->
     <section class="home-content">
 
-    <!-- left column -->
-    <div class="left-column">         
-        <!-- slideshow loading ring -->
-        <div class="loading-ring">
-            <svg width="32" height="32" viewBox="0 0 36 36">
-                <circle
-                    class="ring-bg"
-                    cx="18"
-                    cy="18"
-                    r="16"
-                />
-                <circle
-                    class="ring-progress"
-                    cx="18"
-                    cy="18"
-                    r="16"
-                />
-            </svg>
-        </div>
-
-        <aside class="info">
-            <div id="info-text"></div>
-        </aside>
-    </div>
-
-    <!-- center column -->
-    <div class="center-column">
-        <div class="square">
-            <div class="hero-border">
-                <img src="/assets/images/collections/bassvictim/bassvictim-1.jpg" alt="" class="hero-image" id="hero-image">
-                <div class="tech-overlay"></div>
+        <!-- left column -->
+        <div class="left-column">         
+            
+            <!-- slideshow loading ring -->
+            <div class="loading-ring">
+                <svg width="32" height="32" viewBox="0 0 36 36">
+                    <circle
+                        class="ring-bg"
+                        cx="18"
+                        cy="18"
+                        r="16"
+                    />
+                    <circle
+                        class="ring-progress"
+                        cx="18"
+                        cy="18"
+                        r="16"
+                    />
+                </svg>
             </div>
+
+            <aside class="info">
+                <div id="info-text"></div>
+            </aside>
         </div>
 
-        <nav class="square-nav">
-            <span id="square-prev">&lt;</span>
-                <p id="square-link">
-                    <a href="/collections/bassvictim.html">collection :: bassvictim</a>
-                </p>
-            <span id="square-next">&gt;</span>
-        </nav>
-    </div>
+        <!-- center column -->
+        <div class="center-column">
+            <div class="square">
+                <div class="hero-border">
+                    <img src="/assets/images/collections/bassvictim/bassvictim-1.jpg" alt="Concert photography from the bassvictim collection" class="hero-image" id="hero-image">
+                    <div class="tech-overlay"></div>
+                </div>
+            </div>
 
-    <!-- Right banner -->
-    <div class="banner-wrapper">
-        <div class="scroll-container banner-strip"></div>
-    </div>
+            <nav class="square-nav">
+                <span id="square-prev">&lt;</span>
+                    <p id="square-link">
+                        <a href="/collections/bassvictim.html">collection :: bassvictim</a>
+                    </p>
+                <span id="square-next">&gt;</span>
+            </nav>
+        </div>
 
-</section>
-    
+        <!-- right banner -->
+        <div class="banner-wrapper">
+            <div class="scroll-container banner-strip"></div>
+        </div>
+    </section>
 </main>
 
 <footer class="footer">
@@ -82,11 +112,12 @@
     <div class="footer-center-right">
         <span>concert photography</span>
         <span>ottawa + montreal + toronto</span>
-        <span><a href="/contact.html">contact for inquires</a></span>
+        <span><a href="/contact.html">contact for inquiries</a></span>
     </div>
     <div class="footer-right"><a href="/index.html">17099450a</a></div>
 </footer>
     <script src="/js/core/sec.js" defer></script>
-    <script src="/js/pages/home.js"></script>
+    <script src="/js/core/nav.js" defer></script>
+    <script src="/js/pages/home.js" defer></script>
 </body>
 </html>

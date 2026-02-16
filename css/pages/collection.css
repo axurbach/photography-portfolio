@@ -72,6 +72,7 @@
 
     cursor: grab; /* visual feedback for draggable container */
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
 
     background-color: black;
     padding: 1rem 0;
@@ -80,8 +81,9 @@
 .scroll-container img {
     display: block;        /* prevent inline gaps */
     height: 100%;
-    pointer-events: none;  /* disable default drag behavior */
+    pointer-events: auto;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /*-------------- tablet + mobile styles (≤1024px) --------------*/
