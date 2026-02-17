@@ -15,6 +15,24 @@ let currentCollectionIndex = 0;
 let currentImageIndex = 0;
 const duration = 7000;
 let slideshowInterval = null;
+let isTransitioning = false;
+let activeTransitionId = 0;
+let textTimeoutId = null;
+let indexTimeoutId = null;
+let imageTimeoutId = null;
+let linkTimeoutId = null;
+
+function beginTransition() {
+    isTransitioning = true;
+    activeTransitionId += 1;
+    return activeTransitionId;
+}
+
+function endTransition(transitionId) {
+    if (transitionId === activeTransitionId) {
+        isTransitioning = false;
+    }
+}
 
 // ------------ collections data ------------
 const collections = [
@@ -27,9 +45,9 @@ const collections = [
             "/assets/images/collections/bassvictim/bassvictim-7.jpg"
         ],
         texts: [
-            [ "Bass Victim paragraph 1 line 1", "Bass Victim paragraph 1 line 2" ],
-            [ "Bass Victim paragraph 2 line 1", "Bass Victim paragraph 2 line 2" ],
-            [ "Bass Victim paragraph 3 line 1", "Bass Victim paragraph 3 line 2" ]
+            [ "bassvictim is a london-based electronic music duo made up of vocalist and songwriter maria manow and producer ike clateman", "they first connected in berlin in 2022 and later solidified their collaboration in south london, outside the club peckham audio" ],
+            [ "their music blends elements of electronic, electroclash, and bass-driven productions, marked by raw texture and a forward-leaning sound", "since releasing their first single in 2023, they've built a presence in underground electronic scenes with energetic live performances and subsequent releases" ],
+            [ "this photo collection focuses on the 2025 bassvictim show, live at bar le ritz pdb", "every photo has been carefully edited to capture the weight of the bass, the flicker of the stage lights, and the energy of the crowd" ]
         ]
     },
     {
@@ -41,9 +59,7 @@ const collections = [
             "/assets/images/collections/berlin56/berlin56-3.jpg"
         ],
         texts: [
-            [ "Berlin 56 paragraph 1 line 1", "Berlin 56 paragraph 1 line 2" ],
-            [ "Berlin 56 paragraph 2 line 1", "Berlin 56 paragraph 2 line 2" ],
-            [ "Berlin 56 paragraph 3 line 1", "Berlin 56 paragraph 3 line 2" ]
+            [ "the berlin56 collection took place at berlin nightclub, a vibrant 3-floor venue in the heart of 56 byward market", "djs including chism, lx and anthony cole performed at the nokturnal event" ],
         ]
     }
 ];
@@ -59,35 +75,75 @@ function startProgress() {
 
 // ------------ text update ------------
 const paragraphEl = document.getElementById("info-text"); 
-function updateText() {
+const paragraphIndexEl = document.getElementById("info-index");
+
+function updateParagraphIndex(transitionId = activeTransitionId) {
+    if (!paragraphIndexEl) return;
+
+    const textSets = collections[currentCollectionIndex].texts || [];
+    const nextIndexText = textSets.length <= 1
+        ? ""
+        : `${Math.min(currentImageIndex, textSets.length - 1) + 1}`;
+
+    if (paragraphIndexEl.textContent === nextIndexText) return;
+
+    paragraphIndexEl.classList.add("fade-out");
+    if (indexTimeoutId) clearTimeout(indexTimeoutId);
+    indexTimeoutId = setTimeout(() => {
+        if (transitionId !== activeTransitionId) return;
+        paragraphIndexEl.textContent = nextIndexText;
+        paragraphIndexEl.classList.remove("fade-out");
+    }, 400);
+}
+
+function updateText(transitionId = activeTransitionId) {
+    updateParagraphIndex(transitionId);
+
+    const textSets = collections[currentCollectionIndex].texts || [];
+    const textIndex = textSets.length > 0
+        ? Math.min(currentImageIndex, textSets.length - 1)
+        : 0;
+    const paragraphs = textSets[textIndex] || [];
+    const nextHtml = paragraphs.map(p => `<p>${p}</p>`).join("");
+
+    if (paragraphEl.innerHTML === nextHtml) return;
+
     paragraphEl.classList.add("fade-out");
-    setTimeout(() => {
-        const paragraphs = collections[currentCollectionIndex].texts[currentImageIndex] || [];
-        paragraphEl.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join("");
+    if (textTimeoutId) clearTimeout(textTimeoutId);
+    textTimeoutId = setTimeout(() => {
+        if (transitionId !== activeTransitionId) return;
+        paragraphEl.innerHTML = nextHtml;
         paragraphEl.classList.remove("fade-out");
     }, 400);
 }
 
 // ------------ show next image ------------
 function showNextImage() {
+    if (isTransitioning) return;
+    const transitionId = beginTransition();
     const images = collections[currentCollectionIndex].images;
     overlay.style.opacity = "0.6";
     imageElement.classList.add("fade-out");
 
-    setTimeout(() => {
+    if (imageTimeoutId) clearTimeout(imageTimeoutId);
+    imageTimeoutId = setTimeout(() => {
+        if (transitionId !== activeTransitionId) return;
         currentImageIndex = (currentImageIndex + 1) % images.length;
         imageElement.src = images[currentImageIndex];
         imageElement.classList.remove("fade-out");
         overlay.style.opacity = "0";
         startProgress();
-        updateText();
+        updateText(transitionId);
+        endTransition(transitionId);
     }, 500);
 }
 
 // ------------ square nav link ------------
-function updateLink() {
+function updateLink(transitionId = activeTransitionId) {
     linkEl.classList.add("fade-out");
-    setTimeout(() => {
+    if (linkTimeoutId) clearTimeout(linkTimeoutId);
+    linkTimeoutId = setTimeout(() => {
+        if (transitionId !== activeTransitionId) return;
         const col = collections[currentCollectionIndex];
         linkEl.innerHTML = `<a href="/collections/${col.file}.html">${col.name}</a>`;
         linkEl.classList.remove("fade-out");
@@ -96,6 +152,8 @@ function updateLink() {
 
 // ------------ switch collection ------------
 function switchCollection(index) {
+    if (isTransitioning) return;
+    const transitionId = beginTransition();
     currentCollectionIndex = index;
     currentImageIndex = 0;
 
@@ -104,15 +162,18 @@ function switchCollection(index) {
         imageElement.classList.add("fade-out");
     }
 
-    setTimeout(() => {
+    if (imageTimeoutId) clearTimeout(imageTimeoutId);
+    imageTimeoutId = setTimeout(() => {
+        if (transitionId !== activeTransitionId) return;
         imageElement.src = collections[currentCollectionIndex].images[0];
         imageElement.classList.remove("fade-out");
         overlay.style.opacity = "0";
         startProgress();
+        endTransition(transitionId);
     }, isInitialLoad ? 0 : 300);
 
-    updateLink();
-    updateText();
+    updateLink(transitionId);
+    updateText(transitionId);
 
     clearInterval(slideshowInterval);
     slideshowInterval = setInterval(showNextImage, duration);

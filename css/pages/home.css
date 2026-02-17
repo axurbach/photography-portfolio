@@ -8,11 +8,14 @@
 .info {
     display: flex;
     flex-direction: column;
-    align-self: center;
+    grid-row: 2;
+    align-self: start;
     gap: 2rem;
 }
 
 #info-text {
+    display: flex;
+    flex-direction: column;
     opacity: 1;
     transition: opacity 0.6s ease;
 }
@@ -32,12 +35,29 @@
     opacity: 0;
 }
 
+#info-index {
+    display: flex;
+    grid-row: 3;
+    align-self: end;
+    min-height: 1.2rem;
+    font-size: 14px;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+    transform: translateY(5px); /* slight downward shift for visual balance with center square */
+}
+
+#info-index.fade-out {
+    opacity: 0;
+}
+
 /* loading ring */
 .loading-ring {
     width: 100%;
     display: flex;
+    grid-row: 1;
     flex-direction: row;
     align-self: center;
+    align-self: flex-start;;
 }
 
 /* SVG loading ring styling */
@@ -194,6 +214,7 @@
 
     .left-column {
         display: flex;
+        position: relative;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
@@ -221,6 +242,7 @@
         width: 100%;
         gap: 2rem;
         margin-top: 0;
+        min-height: 300px;
     }
 
     #info-text p {
@@ -229,13 +251,19 @@
         font-size: 14px;
     }
 
+    #info-index {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transform: translateY(-75px); /* shift up to sit just above the footer */
+    }
+
     .loading-ring {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        align-self: center;
+        align-self: flex-start;
         order: 1; /* ensures loading ring appears on right */
-        transform: translateY(-0.1rem); /* subtle vertical adjustment */
     }
 
     /* banner hidden on tablet (rotated on mobile would be confusing) */
@@ -275,6 +303,7 @@
         align-self: center;
         max-width: 40%;
         order: 0;
+        min-height: 400px;
     }
 
     #info-text {
@@ -288,5 +317,9 @@
     #info-text p {
         margin: 0;
         text-align: left;
+    }
+
+    #info-index {
+        transform: translateY(-25px); /* shift up to sit just above the footer */
     }
 }
