@@ -7,8 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "/assets/images/collections/bassvictim/bassvictim-4.jpg",
             "/assets/images/collections/bassvictim/bassvictim-5.jpg",
             "/assets/images/collections/bassvictim/bassvictim-6.jpg",
-            "/assets/images/collections/bassvictim/bassvictim-7.jpg",
-            "/assets/images/collections/bassvictim/bassvictim-8.jpg"
+            "/assets/images/collections/bassvictim/bassvictim-7.jpg"
         ],
         "/collections/berlin56.html": [
             "/assets/images/collections/berlin56/berlin56-1.jpg",

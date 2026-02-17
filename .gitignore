@@ -10,7 +10,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# archive/backup folders (if added later)
+# archive/backup folders 
 /archive/
 
 # node modules (if added later)
