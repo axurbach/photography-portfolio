@@ -33,7 +33,6 @@ a personal project built from scratch using vanilla HTML, CSS, and JavaScript. I
 ├── robots.txt
 └── sitemap.xml
 
-
 ## local dev
 
 open `index.html`  

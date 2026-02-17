@@ -2,11 +2,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const readBtn = document.querySelector(".read-story");
     const extraContent = document.querySelector(".collection-desc");
 
+    function syncExpandedState() {
+        const isExpanded = extraContent?.classList.contains("show");
+        document.body.classList.toggle("collection-expanded", Boolean(isExpanded));
+    }
+
     readBtn?.addEventListener("click", () => {
         extraContent?.classList.toggle("show");
-        readBtn.textContent = extraContent?.classList.contains("show") ? "hide story" : "read story";
-        extraContent?.scrollIntoView({ behavior: "smooth", block: "center" });
+        const isExpanded = extraContent?.classList.contains("show");
+        readBtn.textContent = isExpanded ? "hide description" : "read description";
+        syncExpandedState();
+
+        if (isExpanded) {
+            extraContent?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
     });
+
+    syncExpandedState();
 
     const collectionPages = [
         "/collections/bassvictim.html",

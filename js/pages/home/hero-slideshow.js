@@ -4,6 +4,7 @@ let isInitialLoad = true;
 const imageElement = document.getElementById("hero-image");
 const overlay = document.querySelector(".tech-overlay");
 const ring = document.querySelector(".ring-progress");
+const loadingRingEl = document.querySelector(".loading-ring");
 
 // collection link & nav buttons
 const linkEl = document.getElementById("square-link");
@@ -42,7 +43,7 @@ const collections = [
         images: [
             "/assets/images/collections/bassvictim/bassvictim-1.jpg",
             "/assets/images/collections/bassvictim/bassvictim-2-c.jpg",
-            "/assets/images/collections/bassvictim/bassvictim-7.jpg"
+            "/assets/images/collections/bassvictim/bassvictim-6.jpg"
         ],
         texts: [
             [ "bassvictim is a london-based electronic music duo made up of vocalist and songwriter maria manow and producer ike clateman", "they first connected in berlin in 2022 and later solidified their collaboration in south london, outside the club peckham audio" ],
@@ -55,8 +56,8 @@ const collections = [
         name: "collection :: berlin56",
         images: [
             "/assets/images/collections/berlin56/berlin56-1.jpg",
-            "/assets/images/collections/berlin56/berlin56-2-c.jpg",
-            "/assets/images/collections/berlin56/berlin56-3.jpg"
+            "/assets/images/collections/berlin56/berlin56-2.jpg",
+            "/assets/images/collections/berlin56/berlin56-5.jpg"
         ],
         texts: [
             [ "the berlin56 collection took place at berlin nightclub, a vibrant 3-floor venue in the heart of 56 byward market", "djs including chism, lx and anthony cole performed at the nokturnal event" ],
@@ -71,6 +72,13 @@ function startProgress() {
     ring.getBoundingClientRect(); // force reflow
     ring.style.transition = `stroke-dashoffset ${duration}ms linear`;
     ring.style.strokeDashoffset = "0";
+}
+
+function updateLoadingRingVisibility() {
+    if (!loadingRingEl) return;
+
+    const textSets = collections[currentCollectionIndex].texts || [];
+    loadingRingEl.style.display = textSets.length <= 1 ? "none" : "flex";
 }
 
 // ------------ text update ------------
@@ -168,6 +176,7 @@ function switchCollection(index) {
         imageElement.src = collections[currentCollectionIndex].images[0];
         imageElement.classList.remove("fade-out");
         overlay.style.opacity = "0";
+        updateLoadingRingVisibility();
         startProgress();
         endTransition(transitionId);
     }, isInitialLoad ? 0 : 300);

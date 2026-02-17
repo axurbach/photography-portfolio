@@ -213,26 +213,35 @@
     }
 
     .left-column {
-        display: flex;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "info ring"
+            "info index";
         position: relative;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        align-items: flex-start;
+        align-content: start;
         width: 85vw;
         max-width: 500px;
         align-self: center;
         order: 2;
         margin-top: 6rem;
-        gap: 1rem;
+        column-gap: 1rem;
+        row-gap: 0;
         height: auto;
+        min-height: 300px;
         max-height: none;
         aspect-ratio: unset;
         padding-bottom: 4rem; /* space before footer */
     }
 
     .info {
-        align-self: center;
-        max-width: 40%;
+        grid-area: info;
+        align-self: start;
+        justify-content: start;
+        max-width: 100%;
+        min-width: 0;
         order: 0;
     }
 
@@ -242,28 +251,37 @@
         width: 100%;
         gap: 2rem;
         margin-top: 0;
-        min-height: 300px;
+        min-height: 0;
     }
 
     #info-text p {
         margin: 0;
         text-align: left;
         font-size: 14px;
+        max-width: 200px;
     }
 
     #info-index {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        transform: translateY(-75px); /* shift up to sit just above the footer */
+        grid-area: index;
+        display: flex;
+        align-self: end;
+        justify-content: end;
+        align-items: flex-end;
+        min-height: 1.2rem;
+        font-size: 14px;
+        opacity: 1;
+        transition: opacity 0.6s ease;
+        justify-self: end;
     }
 
     .loading-ring {
+        grid-area: ring;
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        align-self: flex-start;
-        order: 1; /* ensures loading ring appears on right */
+        align-self: start;
+        justify-self: end;
+        width: auto;
     }
 
     /* banner hidden on tablet (rotated on mobile would be confusing) */
@@ -284,26 +302,32 @@
     }
 
     .left-column {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "info ring"
+            "info index";
+        align-items: flex-start;
+        align-content: start;
         width: 85vw;
         max-width: 500px;
         align-self: center;
         order: 2;
         gap: 1rem;
+        row-gap: 0;
         height: auto;
+        min-height: 300px;
         max-height: none;
         aspect-ratio: unset;
     }
 
     .info {
         gap: 2rem;
-        align-self: center;
-        max-width: 40%;
+        align-self: start;
+        max-width: 100%;
+        min-width: 0;
         order: 0;
-        min-height: 400px;
     }
 
     #info-text {
@@ -320,6 +344,8 @@
     }
 
     #info-index {
-        transform: translateY(-25px); /* shift up to sit just above the footer */
+        align-self: end;
+        align-items: flex-end;
+        transform: translateY(0);
     }
 }
