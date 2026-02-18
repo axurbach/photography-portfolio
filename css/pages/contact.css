@@ -48,7 +48,6 @@
 .contact-form button:focus {
     outline: 2px solid #000;
     outline-offset: -2px;
-    border-radius: 0; /* maintain sharp corners */
 }
 
 /* visual feedback for validation states */
