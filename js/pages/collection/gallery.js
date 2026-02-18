@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const CENTER_INDEX = Math.floor(CLONE_COUNT / 2);
     const DRAG_THRESHOLD = 2;
     const CLICK_THRESHOLD = 20;
+    const SHOW_DEBUG = window.location.search.includes("galleryDebug=1") || window.innerWidth <= 1024;
 
     let sequenceWidth = 0;
     let isPointerDown = false;
@@ -47,12 +48,43 @@ document.addEventListener("DOMContentLoaded", () => {
     let lastMoveTime = 0;
     let momentumId = null;
     let overlayJustOpenedUntil = 0;
+    let wrapEventCount = 0;
+    let debugRaf = 0;
+    let debugReason = "init";
 
     container.style.visibility = "hidden";
     container.style.opacity = "0";
     container.style.transition = "opacity 220ms ease";
     container.style.cursor = "pointer";
     container.style.touchAction = "pan-y";
+
+    const debugOverlay = SHOW_DEBUG ? document.createElement("pre") : null;
+    if (debugOverlay) {
+        debugOverlay.style.cssText = "position:fixed;left:8px;bottom:8px;z-index:10001;margin:0;padding:8px 10px;background:rgba(0,0,0,0.75);color:#fff;font:11px/1.3 monospace;border:1px solid rgba(255,255,255,0.35);pointer-events:none;white-space:pre-wrap;max-width:90vw;";
+        document.body.appendChild(debugOverlay);
+    }
+
+    function scheduleDebug(reason = "") {
+        if (!debugOverlay) return;
+        if (reason) debugReason = reason;
+        if (debugRaf) return;
+
+        debugRaf = requestAnimationFrame(() => {
+            debugRaf = 0;
+            const minScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX - 1) : 0;
+            const maxScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX + 1) : 0;
+            debugOverlay.textContent = [
+                `reason: ${debugReason}`,
+                `slug: ${slug || "none"}`,
+                `scrollLeft: ${container.scrollLeft.toFixed(2)}`,
+                `sequenceWidth: ${sequenceWidth.toFixed(2)}`,
+                `min/max: ${minScroll.toFixed(2)} / ${maxScroll.toFixed(2)}`,
+                `pointerDown: ${isPointerDown} dragging: ${isDragging}`,
+                `velocity: ${velocity.toFixed(4)} wraps: ${wrapEventCount}`,
+                `children: ${container.children.length} images: ${container.querySelectorAll("img").length}`
+            ].join("\n");
+        });
+    }
 
     function createSequence(sequenceIndex) {
         const sequence = document.createElement("div");
@@ -88,12 +120,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function measureSequenceWidth() {
         const firstSequence = container.querySelector(".sequence");
         sequenceWidth = firstSequence ? firstSequence.getBoundingClientRect().width : 0;
+        scheduleDebug("measure");
         return sequenceWidth > 0;
     }
 
     function centerStrip() {
         if (sequenceWidth <= 0) return;
         container.scrollLeft = sequenceWidth * CENTER_INDEX;
+        scheduleDebug("center");
     }
 
     function handleInfiniteScroll() {
@@ -101,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const minScroll = sequenceWidth * (CENTER_INDEX - 1);
         const maxScroll = sequenceWidth * (CENTER_INDEX + 1);
+        const before = container.scrollLeft;
 
         while (container.scrollLeft < minScroll) {
             container.scrollLeft += sequenceWidth;
@@ -109,6 +144,11 @@ document.addEventListener("DOMContentLoaded", () => {
         while (container.scrollLeft >= maxScroll) {
             container.scrollLeft -= sequenceWidth;
         }
+
+        if (Math.abs(container.scrollLeft - before) > 0.5) {
+            wrapEventCount += 1;
+            scheduleDebug("wrap-adjust");
+        }
     }
 
     function revealStrip() {
@@ -116,6 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
         handleInfiniteScroll();
         container.style.visibility = "visible";
         container.style.opacity = "1";
+        scheduleDebug("reveal");
     }
 
     function waitForImageReady(image) {
@@ -218,6 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lastX = pageX;
         lastMoveTime = performance.now();
         stopMomentum();
+        scheduleDebug("start-drag");
     }
 
     function getTouchPoint(touchList) {
@@ -248,6 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
         velocity = (pageX - lastX) / dt;
         lastX = pageX;
         lastMoveTime = now;
+        scheduleDebug("move");
     }
 
     function applyMomentum() {
@@ -255,12 +298,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (Math.abs(velocity) < 0.02) {
             velocity = 0;
             momentumId = null;
+            scheduleDebug("momentum-stop");
             return;
         }
 
         container.scrollLeft -= velocity * 16;
         handleInfiniteScroll();
         momentumId = requestAnimationFrame(applyMomentum);
+        scheduleDebug("momentum");
     }
 
     function endInteraction(clientX, clientY) {
@@ -279,6 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
         pointerDownImage = null;
         container.style.cursor = "pointer";
         document.body.style.cursor = "";
+        scheduleDebug("end-drag");
     }
 
     overlay.addEventListener("click", event => {
@@ -351,6 +397,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("resize", () => {
         if (!measureSequenceWidth()) return;
         revealStrip();
+        scheduleDebug("resize");
     });
 
     (async () => {
@@ -361,11 +408,13 @@ document.addEventListener("DOMContentLoaded", () => {
             requestAnimationFrame(() => {
                 if (measureSequenceWidth()) {
                     revealStrip();
+                    scheduleDebug("raf-ready");
                 }
             });
             return;
         }
 
         revealStrip();
+        scheduleDebug("ready");
     })();
 });
