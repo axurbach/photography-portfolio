@@ -23,12 +23,23 @@ html, body {
 
 html {
     font-size: 16px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 body {
     font-family: var(--font-primary);
     overflow-y: hidden;
     line-height: var(--line-height);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
 }
 
 a,
@@ -78,6 +89,33 @@ a:focus-visible {
 
 .js-hidden {
     opacity: 0;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 1000;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-text);
+    padding: 0.5rem 0.75rem;
+}
+
+.skip-link:focus-visible {
+    top: 0.5rem;
 }
 
 /* tablet + mobile styles */

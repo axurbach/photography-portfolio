@@ -1,79 +1,87 @@
-
 // ------------ contact form submission - formspree.io ------------
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.querySelector('.contact-form');
 
-const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-contactForm.addEventListener('submit', async function(e) {
-    e.preventDefault(); // prevent page reload
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const messageInput = document.getElementById('message');
 
-    // get values
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
+            const name = nameInput?.value.trim() || '';
+            const email = emailInput?.value.trim() || '';
+            const message = messageInput?.value.trim() || '';
 
-    // basic validation
-    if (!name || !email || !message) {
-        alert('Please fill in all fields.');
-        return;
-    }
+            if (!name || !email || !message) {
+                alert('Please fill in all fields.');
+                return;
+            }
 
-    // prepare FormData
-    const formData = new FormData(contactForm);
+            const formData = new FormData(contactForm);
 
-    try {
-        const response = await fetch(contactForm.action, {
-            method: contactForm.method,
-            body: formData,
-            headers: {
-                'Accept': 'application/json'
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: contactForm.method,
+                    body: formData,
+                    headers: {
+                        Accept: 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    alert(`Thanks, ${name}! Your message has been sent.`);
+                    contactForm.reset();
+                } else {
+                    alert('Oops! There was a problem submitting your message.');
+                }
+            } catch (error) {
+                alert('Oops! Network error. Please try again.');
             }
         });
-
-        if (response.ok) {
-            // success: show message and reset form
-            alert(`Thanks, ${name}! Your message has been sent.`);
-            contactForm.reset();
-        } else {
-            // server error
-            alert('Oops! There was a problem submitting your message.');
-        }
-    } catch (error) {
-        // network error
-        alert('Oops! Network error. Please try again.');
     }
-});
 
-// ------------ contact nav carousel ------------
+    // ------------ contact nav carousel ------------
+    const links = [
+        { label: 'email', value: 'axurbach@gmail.com', href: 'mailto:axurbach@gmail.com' },
+        { label: 'instagram', value: '@17099450a', href: 'https://instagram.com/17099450a' }
+    ];
 
-const links = [
-    { text: "email :: axurbach@gmail.com", href: "mailto:axurbach@gmail.com" },
-    // (add later) { text: "linkedin :: linkedin.com/in/username", href: "https://linkedin.com/in/username" },
-    { text: "instagram :: @17099450a", href: "https://instagram.com/17099450a" }
-];
+    let current = 0;
+    const linkEl = document.getElementById('contact-link');
+    const prevBtn = document.getElementById('contact-prev');
+    const nextBtn = document.getElementById('contact-next');
 
-let current = 0;
-const linkEl = document.getElementById('contact-link');
-const prevBtn = document.getElementById('contact-prev');
-const nextBtn = document.getElementById('contact-next');
+    function updateLink(index) {
+        if (!linkEl) return;
 
-function updateLink(index) {
-    // fade out
-    linkEl.classList.add('fade-out');
+        linkEl.classList.add('fade-out');
 
-    setTimeout(() => {
-        // update text and href
-        linkEl.innerHTML = links[index].text.replace(/:: (.+)/, `:: <a href="${links[index].href}" target="_blank">$1</a>`);
-        // fade back in
-        linkEl.classList.remove('fade-out');
-    }, 500);
-}
+        setTimeout(() => {
+            linkEl.textContent = `${links[index].label} :: `;
 
-prevBtn.addEventListener('click', () => {
-    current = (current - 1 + links.length) % links.length;
-    updateLink(current);
-});
+            const anchor = document.createElement('a');
+            anchor.href = links[index].href;
+            anchor.textContent = links[index].value;
 
-nextBtn.addEventListener('click', () => {
-    current = (current + 1) % links.length;
-    updateLink(current);
+            if (links[index].href.startsWith('http')) {
+                anchor.target = '_blank';
+                anchor.rel = 'noopener noreferrer';
+            }
+
+            linkEl.appendChild(anchor);
+            linkEl.classList.remove('fade-out');
+        }, 500);
+    }
+
+    prevBtn?.addEventListener('click', () => {
+        current = (current - 1 + links.length) % links.length;
+        updateLink(current);
+    });
+
+    nextBtn?.addEventListener('click', () => {
+        current = (current + 1) % links.length;
+        updateLink(current);
+    });
 });

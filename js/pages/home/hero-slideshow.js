@@ -47,7 +47,7 @@ const collections = [
         ],
         texts: [
             [ "bassvictim is a london-based electronic music duo made up of vocalist and songwriter maria manow and producer ike clateman", "they first connected in berlin in 2022 and later solidified their collaboration in south london, outside the club peckham audio" ],
-            [ "their music blends elements of electronic, electroclash, and bass-driven productions, marked by raw texture and a forward-leaning sound", "since releasing their first single in 2023, they've built a presence in underground electronic scenes with energetic live performances and subsequent releases" ],
+            [ "their music blends elements of electronic, electroclash, and bass-driven productions", "since releasing their first single in 2023, they've built a presence in underground electronic scenes with energetic live performances and subsequent releases" ],
             [ "this photo collection focuses on the 2025 bassvictim show, live at bar le ritz pdb", "every photo has been carefully edited to capture the weight of the bass, the flicker of the stage lights, and the energy of the crowd" ]
         ]
     },

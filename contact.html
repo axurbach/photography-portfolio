@@ -12,12 +12,15 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="17099450a">
     <meta property="og:description" content="get in touch :: inquiries + bookings">
+    <meta property="og:image" content="/assets/images/collections/bassvictim/bassvictim-1.jpg">
     <meta property="og:url" content="https://17099450a.com/contact.html">
+    <link rel="canonical" href="https://17099450a.com/contact.html">
     
     <!-- twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="17099450a">
     <meta name="twitter:description" content="get in touch :: inquiries + bookings">
+    <meta name="twitter:image" content="/assets/images/collections/bassvictim/bassvictim-1.jpg">
     
     <title>17099450a :: contact</title>
     <link rel="stylesheet" href="/css/base.css">
@@ -33,30 +36,32 @@
 </head>
 
 <body class="js-hidden">
+<a class="skip-link" href="#main-content">skip to main content</a>
 <header class="header">
     <div class="header-left"><a href="/index.html">17099450a</a></div>
     <div class="header-center"><a href="/index.html">home</a></div>
-    <nav class="header-right">
+    <nav class="header-right" aria-label="Primary">
         <a href="/about.html">about</a>
-        <a href="/contact.html">contact</a>
+        <a href="/contact.html" aria-current="page">contact</a>
     </nav>
 
     <!-- hamburger menu button -->
-    <button class="hamburger" id="hamburger-btn" aria-label="Open Menu">
+    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
         <span></span>
         <span></span>
         <span></span>
     </button>
 
     <!-- hamburger menu -->
-    <nav class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" aria-hidden="true">
         <a href="/index.html">home</a>
         <a href="/about.html">about</a>
-        <a href="/contact.html">contact</a>
+        <a href="/contact.html" aria-current="page">contact</a>
     </nav>
 </header>
 
-<main class="main">
+<main class="main" id="main-content">
+    <h1 class="sr-only">Contact and bookings</h1>
     <section class="contact-content">
 		<div class="contact-column">
 			<div class="form-frame">
@@ -75,11 +80,11 @@
 			</div>
 
 			<div class="contact-nav">
-				<span id="contact-prev">&lt;</span>
+                <button id="contact-prev" type="button" aria-label="Previous contact link">&lt;</button>
 					<p id="contact-link">
 						email :: <a href="mailto:axurbach@gmail.com">axurbach@gmail.com</a>
 					</p>
-				<span id="contact-next">&gt;</span>
+                <button id="contact-next" type="button" aria-label="Next contact link">&gt;</button>
 			</div>
 		</div>
     </section>
@@ -97,6 +102,6 @@
 </footer>
 	<script src="/js/core/sec.js" defer></script>
     <script src="/js/core/nav.js" defer></script>
-	<script src="/js/pages/contact.js"></script>
+    <script src="/js/pages/contact.js" defer></script>
 </body>
 </html>

@@ -2,9 +2,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const readBtn = document.querySelector(".read-story");
     const extraContent = document.querySelector(".collection-desc");
 
+    function updateExpandedHeight() {
+        if (!extraContent?.classList.contains("show")) return;
+        extraContent.style.maxHeight = `${extraContent.scrollHeight}px`;
+    }
+
     function syncExpandedState() {
         const isExpanded = extraContent?.classList.contains("show");
         document.body.classList.toggle("collection-expanded", Boolean(isExpanded));
+        document.documentElement.classList.toggle("collection-expanded", Boolean(isExpanded));
+
+        if (!extraContent) return;
+
+        if (isExpanded) {
+            extraContent.style.maxHeight = `${extraContent.scrollHeight}px`;
+        } else {
+            extraContent.style.maxHeight = "0px";
+        }
     }
 
     readBtn?.addEventListener("click", () => {
@@ -14,11 +28,19 @@ document.addEventListener("DOMContentLoaded", () => {
         syncExpandedState();
 
         if (isExpanded) {
+            requestAnimationFrame(updateExpandedHeight);
+            setTimeout(updateExpandedHeight, 250);
+        }
+
+        if (isExpanded) {
             extraContent?.scrollIntoView({ behavior: "smooth", block: "center" });
         }
     });
 
     syncExpandedState();
+
+    window.addEventListener("resize", updateExpandedHeight);
+    window.addEventListener("load", updateExpandedHeight);
 
     const collectionPages = [
         "/collections/bassvictim.html",

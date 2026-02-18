@@ -14,6 +14,7 @@
     <meta property="og:description" content="about">
     <meta property="og:image" content="/assets/images/about/self-portrait.jpg">
     <meta property="og:url" content="https://17099450a.com/about.html">
+    <link rel="canonical" href="https://17099450a.com/about.html">
     
     <!-- twitter -->
     <meta name="twitter:card" content="summary">
@@ -35,30 +36,32 @@
 </head>
 
 <body class="js-hidden">
+<a class="skip-link" href="#main-content">skip to main content</a>
 <header class="header">
     <div class="header-left"><a href="/index.html">17099450a</a></div>
     <div class="header-center"><a href="/index.html">home</a></div>
-    <nav class="header-right">
-        <a href="/about.html">about</a>
+    <nav class="header-right" aria-label="Primary">
+        <a href="/about.html" aria-current="page">about</a>
         <a href="/contact.html">contact</a>
     </nav>
 
     <!-- hamburger menu button -->
-    <button class="hamburger" id="hamburger-btn" aria-label="Open Menu">
+    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
         <span></span>
         <span></span>
         <span></span>
     </button>
 
     <!-- hamburger menu -->
-    <nav class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" aria-hidden="true">
         <a href="/index.html">home</a>
-        <a href="/about.html">about</a>
+        <a href="/about.html" aria-current="page">about</a>
         <a href="/contact.html">contact</a>
     </nav>
 </header>
 
-<main class="main">
+<main class="main" id="main-content">
+    <h1 class="sr-only">About Alexander Urbach</h1>
     <section class="about-content">
         <img src="/assets/images/about/self-portrait.jpg" alt="self portrait of alexander urbach" class="self-portrait" id="self-portrait">
 

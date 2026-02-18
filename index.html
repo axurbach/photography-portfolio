@@ -14,6 +14,7 @@
     <meta property="og:description" content="live :: photography">
     <meta property="og:image" content="/assets/images/collections/bassvictim/bassvictim-1.jpg">
     <meta property="og:url" content="https://17099450a.com/">
+    <link rel="canonical" href="https://17099450a.com/">
     
     <!-- twitter -->
     <meta name="twitter:card" content="summary_large_image">
@@ -35,30 +36,32 @@
 </head>
 
 <body class="js-hidden">
+<a class="skip-link" href="#main-content">skip to main content</a>
 <header class="header">
     <div class="header-left"><a href="/index.html">17099450a</a></div>
-    <div class="header-center"><a href="/index.html">home</a></div>
-    <nav class="header-right">
+    <div class="header-center"><a href="/index.html" aria-current="page">home</a></div>
+    <nav class="header-right" aria-label="Primary">
         <a href="/about.html">about</a>
         <a href="/contact.html">contact</a>
     </nav>
 
     <!-- hamburger menu button -->
-    <button class="hamburger" id="hamburger-btn" aria-label="Open Menu">
+    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
         <span></span>
         <span></span>
         <span></span>
     </button>
 
     <!-- hamburger menu -->
-    <nav class="mobile-menu" id="mobile-menu">
-        <a href="/index.html">home</a>
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" aria-hidden="true">
+        <a href="/index.html" aria-current="page">home</a>
         <a href="/about.html">about</a>
         <a href="/contact.html">contact</a>
     </nav>
 </header>
 
-<main class="main">
+<main class="main" id="main-content">
+    <h1 class="sr-only">17099450a concert photography portfolio</h1>
     <!-- homepage content wrapper -->
     <section class="home-content">
 
@@ -100,11 +103,11 @@
             </div>
 
             <nav class="square-nav">
-                <span id="square-prev">&lt;</span>
+                <button id="square-prev" type="button" aria-label="Previous collection">&lt;</button>
                     <p id="square-link">
                         <a href="/collections/bassvictim.html">collection :: bassvictim</a>
                     </p>
-                <span id="square-next">&gt;</span>
+                <button id="square-next" type="button" aria-label="Next collection">&gt;</button>
             </nav>
         </div>
 

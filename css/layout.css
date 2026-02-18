@@ -144,6 +144,23 @@ html, body {
     display: none;
 }
 
+/*-------------- desktop lock-in (≥1025px) --------------*/
+@media screen and (min-width: 1025px) {
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
 /*-------------- tablet styles (≤1024px) --------------*/
 @media screen and (max-width: 1024px) {
     /* switch to flexible column layout for narrower screens */
@@ -161,6 +178,8 @@ html, body {
     .main {
         flex: 1;
         height: auto;
+        padding-top: 3rem;
+        padding-bottom: 3.5rem;
     }
 
     .header {
@@ -169,7 +188,6 @@ html, body {
         background-color: white;
     }
 
-    .home-content,
     .home-content,
     .about-content {
         width: 100%;
@@ -208,6 +226,10 @@ html, body {
 /*-------------- mobile styles (≤767px) --------------*/
 @media screen and (max-width: 767px) {
     /* stack everything vertically and optimize spacing for small screens */
+
+    .main {
+        padding-top: 0;
+    }
     
     /* hide desktop navigation */
     .header-center,
@@ -284,7 +306,6 @@ html, body {
     }
 
     .footer {
-        position: relative;
         overflow: visible;
 
         display: grid;

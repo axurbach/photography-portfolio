@@ -6,6 +6,27 @@
     transition: opacity 0.6s ease;
 }
 
+.collection-prev,
+.collection-next,
+.read-story {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+    transition-delay: 0s;
+}
+
+.collection-nav.bottom .collection-prev,
+.collection-nav.bottom .collection-next,
+.collection-nav.bottom .read-story {
+    transition-delay: 0.15s;
+}
+
+body.js-hidden .collection-title,
+body.js-hidden .collection-prev,
+body.js-hidden .collection-next,
+body.js-hidden .read-story {
+    opacity: 0;
+}
+
 .collection-nav {
     display: flex;
     width: 100%;
@@ -51,6 +72,7 @@
     opacity: 0;
     margin-top: 0;
     padding: 0;
+    font-size: 14px;
     transition: 
         max-height 0.5s ease,
         margin 0.5s ease,
@@ -59,18 +81,13 @@
 }
 
 .collection-desc.show {
-    max-height: 800px; /* limit description height to prevent layout shift */
     margin-bottom: 4rem;
     opacity: 1;
     margin-top: 1rem;
     padding: 0.5rem 0;
 }
 
-.collection-desc.show p {
-    margin: 0;
-}
-
-/* scrollable image strip - manual scrolling with grab cursor */
+/* scrollable image strip */
 .scroll-container {
     width: 100%;
     height: 50%;
@@ -89,29 +106,27 @@
 }
 
 .scroll-container img {
-    display: block;        /* prevent inline gaps */
+    display: block; /* prevent inline gaps */
     height: 100%;
     pointer-events: auto;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
 
-/*-------------- desktop collection page scrolling --------------*/
+/*-------------- desktop collection page scrolling/expanding --------------*/
 @media screen and (min-width: 1025px) {
-    html {
-        overflow-y: hidden;
-        overflow-x: hidden;
-    }
-
-    body {
-        overflow-y: hidden;
-        overflow-x: hidden;
-    }
-
     body.collection-expanded {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
         overflow-y: auto;
+        overflow-x: hidden;
         scrollbar-width: none;
         -ms-overflow-style: none;
+    }
+
+    html.collection-expanded {
+        overflow-y: auto;
     }
 
     body.collection-expanded::-webkit-scrollbar {
@@ -120,16 +135,33 @@
         display: none;
     }
 
+    body.collection-expanded .header,
+    body.collection-expanded .footer {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        z-index: auto;
+    }
+
     body.collection-expanded .main {
+        flex: 1;
         height: auto;
-        min-height: 100vh;
-        align-items: center;
+        min-height: 0;
+        align-items: flex-start;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
     body.collection-expanded .collection-content {
         height: auto;
-        min-height: 60vh;
-        padding-bottom: 6rem;
+        min-height: 0;
+        margin-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        transform: translateY(0);
+    }
+
+    body.collection-expanded .collection-desc.show {
+        margin-bottom: 1rem;
     }
 
     .scroll-container {
@@ -150,7 +182,6 @@
 }
 
 /*-------------- mobile styles (≤768px) --------------*/
-
 @media screen and (max-width: 768px) {
     .collection-desc {
         max-width: 300px; 
