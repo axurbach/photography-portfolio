@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let isDragging = false;
     let startX = 0;
     let scrollStart = 0;
+    let virtualScroll = 0;
     let startClientX = 0;
     let startClientY = 0;
     let pointerDownImage = null;
@@ -71,12 +72,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         debugRaf = requestAnimationFrame(() => {
             debugRaf = 0;
-            const minScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX - 1) : 0;
-            const maxScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX + 1) : 0;
+            const minScroll = 0;
+            const maxScroll = sequenceWidth > 0 ? sequenceWidth : 0;
             debugOverlay.textContent = [
                 `reason: ${debugReason}`,
                 `slug: ${slug || "none"}`,
                 `scrollLeft: ${container.scrollLeft.toFixed(2)}`,
+                `virtualScroll: ${virtualScroll.toFixed(2)}`,
                 `sequenceWidth: ${sequenceWidth.toFixed(2)}`,
                 `min/max: ${minScroll.toFixed(2)} / ${maxScroll.toFixed(2)}`,
                 `pointerDown: ${isPointerDown} dragging: ${isDragging}`,
@@ -136,26 +138,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function centerStrip() {
         if (sequenceWidth <= 0) return;
-        container.scrollLeft = sequenceWidth * CENTER_INDEX;
+        virtualScroll = 0;
+        container.scrollLeft = 0;
         scheduleDebug("center");
+    }
+
+    function normalizeScroll(value) {
+        if (sequenceWidth <= 0) return 0;
+        return ((value % sequenceWidth) + sequenceWidth) % sequenceWidth;
     }
 
     function handleInfiniteScroll() {
         if (sequenceWidth <= 0) return;
 
-        const minScroll = sequenceWidth * (CENTER_INDEX - 1);
-        const maxScroll = sequenceWidth * (CENTER_INDEX + 1);
         const before = container.scrollLeft;
+        const normalized = normalizeScroll(before);
+        virtualScroll = normalized;
 
-        while (container.scrollLeft < minScroll) {
-            container.scrollLeft += sequenceWidth;
-        }
-
-        while (container.scrollLeft >= maxScroll) {
-            container.scrollLeft -= sequenceWidth;
-        }
-
-        if (Math.abs(container.scrollLeft - before) > 0.5) {
+        if (Math.abs(before - normalized) > 0.5) {
+            container.scrollLeft = normalized;
             wrapEventCount += 1;
             scheduleDebug("wrap-adjust");
         }
@@ -261,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
         isPointerDown = true;
         isDragging = false;
         startX = pageX;
-        scrollStart = container.scrollLeft;
+        scrollStart = virtualScroll;
         startClientX = clientX;
         startClientY = clientY;
         pointerDownImage = target?.closest("img") || null;
@@ -293,7 +294,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (!isDragging) return;
 
-        container.scrollLeft = scrollStart - delta;
+        virtualScroll = normalizeScroll(scrollStart - delta);
+        container.scrollLeft = virtualScroll;
         handleInfiniteScroll();
 
         const dt = Math.max(1, now - lastMoveTime);
@@ -312,7 +314,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        container.scrollLeft -= velocity * 16;
+        virtualScroll = normalizeScroll(virtualScroll - velocity * 16);
+        container.scrollLeft = virtualScroll;
         handleInfiniteScroll();
         momentumId = requestAnimationFrame(applyMomentum);
         scheduleDebug("momentum");
@@ -356,7 +359,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    container.addEventListener("scroll", handleInfiniteScroll, { passive: true });
+    container.addEventListener("scroll", () => {
+        handleInfiniteScroll();
+        scheduleDebug("scroll");
+    }, { passive: true });
 
     container.addEventListener("mousedown", event => {
         if (event.button !== 0) return;
@@ -400,8 +406,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     container.addEventListener("wheel", event => {
         event.preventDefault();
-        container.scrollLeft += event.deltaY;
+        virtualScroll = normalizeScroll(virtualScroll + event.deltaY);
+        container.scrollLeft = virtualScroll;
         handleInfiniteScroll();
+        scheduleDebug("wheel");
     });
 
     window.addEventListener("resize", () => {
