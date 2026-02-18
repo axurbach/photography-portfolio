@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sequence.classList.add("sequence");
         sequence.style.display = "flex";
         sequence.style.flexShrink = "0";
+        sequence.style.height = "100%";
         sequence.style.gap = `${IMAGE_GAP_REM}rem`;
 
         images.forEach(src => {
@@ -102,6 +103,9 @@ document.addEventListener("DOMContentLoaded", () => {
             image.fetchPriority = "high";
             image.decoding = "async";
             image.draggable = false;
+            image.style.display = "block";
+            image.style.height = "100%";
+            image.style.width = "auto";
             image.style.flexShrink = "0";
             image.style.cursor = "inherit";
             sequence.appendChild(image);
