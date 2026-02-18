@@ -1,25 +1,25 @@
-# # system files
-# .DS_Store
-# Thumbs.db
-# *.log
-# *.swp
-# *.swo
-# *~
+# system files
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+*.swo
+*~
 
-# # editor directories
-# .vscode/
-# .idea/
+# editor directories
+.vscode/
+.idea/
 
-# # archive/backup folders 
-# /archive/
+# archive/backup folders 
+/archive/
 
-# # node modules (if added later)
-# node_modules/
+# node modules (if added later)
+node_modules/
 
-# # build/distribution files
-# dist/
-# build/
+# build/distribution files
+dist/
+build/
 
-# # environment files
-# .env
-# .env.local
+# environment files
+.env
+.env.local
