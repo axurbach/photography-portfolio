@@ -19,17 +19,18 @@
 @media screen and (max-width: 1024px) {
     .self-portrait {
         width: 85vw;
-        margin-top: 1.6rem;
+        margin-top: 1rem;
         max-width: 500px;
     }
 
     .about-info {
+        font-size: 14px;
         width: 85vw;
         max-width: 500px;
         height: auto;
         max-height: none;
         aspect-ratio: unset;
-        margin: 4rem 0;
+        margin: 2rem 0;
         padding: 0; /* remove horizontal padding from mobile */
     }
 }
