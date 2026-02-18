@@ -23,9 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const pageSlug = currentPage.split("/").pop().replace(".html", "");
     const images = collectionImages[pageSlug] || [];
     const container = document.querySelector(".scroll-container");
+    if (!container || !images.length) return;
+
     const IMAGE_GAP_REM = 1;
-    const CLONE_COUNT = 4;
+    const CLONE_COUNT = 3;
     const DRAG_THRESHOLD = 1;
+    const CLICK_THRESHOLD = 20;
 
     function createSequence() {
         const seq = document.createElement("div");
@@ -48,13 +51,47 @@ document.addEventListener("DOMContentLoaded", () => {
         container.appendChild(createSequence());
     }
 
-    container.scrollLeft = container.scrollWidth / 2;
+    let sequenceWidth = 0;
+
+    function updateSequenceWidth() {
+        const firstSequence = container.querySelector(".sequence");
+        sequenceWidth = firstSequence ? Math.round(firstSequence.getBoundingClientRect().width) : 0;
+
+        if (sequenceWidth > 0 && container.scrollLeft === 0) {
+            container.scrollLeft = sequenceWidth;
+        }
+    }
+
+    updateSequenceWidth();
+
+    const allImages = Array.from(container.querySelectorAll("img"));
+    allImages.forEach(img => {
+        if (!img.complete) {
+            img.addEventListener("load", updateSequenceWidth, { once: true });
+        }
+    });
+
+    window.addEventListener("resize", updateSequenceWidth);
+
+    if (sequenceWidth > 0) {
+        container.scrollLeft = sequenceWidth;
+    }
+
     container.style.cursor = "pointer";
     container.style.touchAction = "pan-y";
 
     // drag & momentum
-    let isMouseDown = false, isDragging = false;
-    let startX = 0, scrollStart = 0, velocity = 0, lastX = 0, momentumID;
+    let isPointerDown = false;
+    let isDragging = false;
+    let startX = 0;
+    let scrollStart = 0;
+    let velocity = 0;
+    let lastX = 0;
+    let lastMoveTime = 0;
+    let momentumID = null;
+    let startClientX = 0;
+    let startClientY = 0;
+    let pointerDownImg = null;
 
     // overlay / lightbox
     const overlay = document.createElement("div");
@@ -114,53 +151,47 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.key === "Escape") hideOverlay();
     });
 
-    // pointer logic
-    let pointerDownX = 0, pointerDownY = 0, activePointerId = null, pointerDownImg = null;
-    const CLICK_THRESHOLD = 20;
-
-    container.addEventListener("pointerdown", e => {
-        if (e.pointerType === "mouse" && e.button !== 0) return;
-        activePointerId = e.pointerId;
-        container.setPointerCapture(activePointerId);
-        isMouseDown = true;
-        startX = e.pageX;
+    function startInteraction(pageX, clientX, clientY, target) {
+        isPointerDown = true;
+        isDragging = false;
+        startX = pageX;
         scrollStart = container.scrollLeft;
-        lastX = e.pageX;
+        lastX = pageX;
+        lastMoveTime = performance.now();
         velocity = 0;
         if (momentumID) cancelAnimationFrame(momentumID);
+        momentumID = null;
 
-        pointerDownX = e.clientX;
-        pointerDownY = e.clientY;
-        pointerDownImg = e.target.closest("img");
-    });
+        startClientX = clientX;
+        startClientY = clientY;
+        pointerDownImg = target?.closest("img") || null;
+    }
 
-    container.addEventListener("pointermove", e => {
-        if (!isMouseDown || (activePointerId !== null && e.pointerId !== activePointerId)) return;
-        const dx = e.pageX - startX;
+    function moveInteraction(pageX, nowTime) {
+        if (!isPointerDown) return;
+
+        const dx = pageX - startX;
         if (!isDragging && Math.abs(dx) > DRAG_THRESHOLD) {
             isDragging = true;
             container.style.cursor = "grabbing";
         }
         if (!isDragging) return;
 
-        e.preventDefault();
         container.scrollLeft = scrollStart - dx;
-        velocity = e.pageX - lastX;
-        lastX = e.pageX;
-
+        const dt = Math.max(1, nowTime - lastMoveTime);
+        const deltaX = pageX - lastX;
+        velocity = deltaX / dt;
+        lastX = pageX;
+        lastMoveTime = nowTime;
         handleInfiniteScroll();
-    });
+    }
 
-    function stopInteraction(e) {
-        if (!isMouseDown) return;
-        isMouseDown = false;
-        if (activePointerId !== null) {
-            container.releasePointerCapture(activePointerId);
-            activePointerId = null;
-        }
+    function endInteraction(clientX, clientY) {
+        if (!isPointerDown) return;
+        isPointerDown = false;
 
-        const movedX = e.clientX - pointerDownX;
-        const movedY = e.clientY - pointerDownY;
+        const movedX = clientX - startClientX;
+        const movedY = clientY - startClientY;
         const movedDistance = Math.hypot(movedX, movedY);
 
         if (isDragging) {
@@ -176,9 +207,45 @@ document.addEventListener("DOMContentLoaded", () => {
         container.style.cursor = "pointer";
     }
 
-    container.addEventListener("pointerup", stopInteraction);
-    container.addEventListener("pointercancel", stopInteraction);
-    container.addEventListener("pointerleave", stopInteraction);
+    container.addEventListener("mousedown", e => {
+        if (e.button !== 0) return;
+        startInteraction(e.pageX, e.clientX, e.clientY, e.target);
+    });
+
+    window.addEventListener("mousemove", e => {
+        if (!isPointerDown) return;
+        e.preventDefault();
+        moveInteraction(e.pageX, performance.now());
+    });
+
+    window.addEventListener("mouseup", e => {
+        endInteraction(e.clientX, e.clientY);
+    });
+
+    container.addEventListener("touchstart", e => {
+        const touch = e.touches[0];
+        if (!touch) return;
+        startInteraction(touch.pageX, touch.clientX, touch.clientY, e.target);
+    }, { passive: true });
+
+    container.addEventListener("touchmove", e => {
+        const touch = e.touches[0];
+        if (!touch || !isPointerDown) return;
+        e.preventDefault();
+        moveInteraction(touch.pageX, performance.now());
+    }, { passive: false });
+
+    container.addEventListener("touchend", e => {
+        const touch = e.changedTouches[0];
+        if (!touch) return;
+        endInteraction(touch.clientX, touch.clientY);
+    });
+
+    container.addEventListener("touchcancel", e => {
+        const touch = e.changedTouches[0];
+        if (!touch) return;
+        endInteraction(touch.clientX, touch.clientY);
+    });
 
     container.addEventListener("wheel", e => {
         e.preventDefault();
@@ -188,28 +255,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // momentum & infinite scroll
     function applyMomentum() {
-        velocity *= 0.95;
-        if (Math.abs(velocity) < 0.5) return;
-        container.scrollLeft -= velocity;
+        velocity *= 0.92;
+        if (Math.abs(velocity) < 0.02) {
+            velocity = 0;
+            momentumID = null;
+            return;
+        }
+        container.scrollLeft -= velocity * 16;
         handleInfiniteScroll();
         momentumID = requestAnimationFrame(applyMomentum);
     }
 
     function handleInfiniteScroll() {
-        const sequences = Array.from(container.querySelectorAll(".sequence"));
-        if (!sequences.length) return;
-        const first = sequences[0];
-        const last = sequences[sequences.length - 1];
-        const containerRect = container.getBoundingClientRect();
-        const seqWidth = first.getBoundingClientRect().width;
-
-        if (first.getBoundingClientRect().right < containerRect.left) {
-            container.appendChild(first);
-            container.scrollLeft -= seqWidth;
-        }
-        if (last.getBoundingClientRect().left > containerRect.right) {
-            container.insertBefore(last, first);
-            container.scrollLeft += seqWidth;
+        if (sequenceWidth <= 0) return;
+        if (container.scrollLeft >= sequenceWidth * 2) {
+            container.scrollLeft -= sequenceWidth;
+        } else if (container.scrollLeft <= 0) {
+            container.scrollLeft += sequenceWidth;
         }
     }
 });
