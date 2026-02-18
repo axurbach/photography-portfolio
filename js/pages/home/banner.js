@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const images = ["/assets/images/home/home-banner.png"];
+    const images = ["./assets/images/home/home-banner.png"];
     const container = document.querySelector(".banner-strip");
     const IMAGE_GAP = 0;
     const CLONE_COUNT = 3;

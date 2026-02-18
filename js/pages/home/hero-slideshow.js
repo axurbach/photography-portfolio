@@ -41,9 +41,9 @@ const collections = [
         file: "bassvictim",
         name: "collection :: bassvictim",
         images: [
-            "/assets/images/collections/bassvictim/bassvictim-1.jpg",
-            "/assets/images/collections/bassvictim/bassvictim-2-c.jpg",
-            "/assets/images/collections/bassvictim/bassvictim-6.jpg"
+            "./assets/images/collections/bassvictim/bassvictim-1.jpg",
+            "./assets/images/collections/bassvictim/bassvictim-2-c.jpg",
+            "./assets/images/collections/bassvictim/bassvictim-6.jpg"
         ],
         texts: [
             [ "bassvictim is a london-based electronic music duo made up of vocalist and songwriter maria manow and producer ike clateman", "they first connected in berlin in 2022 and later solidified their collaboration in south london, outside the club peckham audio" ],
@@ -55,9 +55,9 @@ const collections = [
         file: "berlin56",
         name: "collection :: berlin56",
         images: [
-            "/assets/images/collections/berlin56/berlin56-1.jpg",
-            "/assets/images/collections/berlin56/berlin56-2.jpg",
-            "/assets/images/collections/berlin56/berlin56-5.jpg"
+            "./assets/images/collections/berlin56/berlin56-1.jpg",
+            "./assets/images/collections/berlin56/berlin56-2.jpg",
+            "./assets/images/collections/berlin56/berlin56-5.jpg"
         ],
         texts: [
             [ "the berlin56 collection took place at berlin nightclub, a vibrant 3-floor venue in the heart of 56 byward market", "djs including chism, lx and anthony cole performed at the nokturnal event" ],
@@ -153,7 +153,7 @@ function updateLink(transitionId = activeTransitionId) {
     linkTimeoutId = setTimeout(() => {
         if (transitionId !== activeTransitionId) return;
         const col = collections[currentCollectionIndex];
-        linkEl.innerHTML = `<a href="/collections/${col.file}.html">${col.name}</a>`;
+        linkEl.innerHTML = `<a href="./collections/${col.file}.html">${col.name}</a>`;
         linkEl.classList.remove("fade-out");
     }, 200);
 }
@@ -209,5 +209,5 @@ const heroBorder = document.querySelector(".hero-border");
 heroBorder.style.cursor = "pointer";
 heroBorder.addEventListener("click", () => {
     const col = collections[currentCollectionIndex];
-    window.location.href = `/collections/${col.file}.html`;
+    window.location.href = `./collections/${col.file}.html`;
 });

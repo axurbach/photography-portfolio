@@ -43,11 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("load", updateExpandedHeight);
 
     const collectionPages = [
-        "/collections/bassvictim.html",
-        "/collections/berlin56.html"
+        "bassvictim.html",
+        "berlin56.html"
     ];
 
-    const currentPage = window.location.pathname;
+    const currentPage = window.location.pathname.split("/").pop();
     let currentIndex = collectionPages.indexOf(currentPage);
     if (currentIndex === -1) currentIndex = 0;
 
