@@ -26,20 +26,26 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!container || !images.length) return;
 
     const IMAGE_GAP_REM = 1;
-    const CLONE_COUNT = 3;
+    const MIN_CLONE_COUNT = 3;
     const DRAG_THRESHOLD = 1;
     const CLICK_THRESHOLD = 20;
+
+    let cloneCount = MIN_CLONE_COUNT;
 
     function createSequence() {
         const seq = document.createElement("div");
         seq.classList.add("sequence");
         seq.style.display = "flex";
+        seq.style.flexShrink = "0";
 
         images.forEach(src => {
             const img = document.createElement("img");
             img.src = src;
+            img.loading = "eager";
+            img.decoding = "async";
             img.style.marginRight = IMAGE_GAP_REM + "rem";
             img.style.cursor = "pointer";
+            img.style.flexShrink = "0";
             img.draggable = false;
             seq.appendChild(img);
         });
@@ -47,9 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return seq;
     }
 
-    for (let i = 0; i < CLONE_COUNT; i++) {
-        container.appendChild(createSequence());
+    function renderSequences(count) {
+        container.innerHTML = "";
+        for (let i = 0; i < count; i++) {
+            container.appendChild(createSequence());
+        }
     }
+
+    renderSequences(cloneCount);
 
     let sequenceWidth = 0;
 
@@ -57,24 +68,48 @@ document.addEventListener("DOMContentLoaded", () => {
         const firstSequence = container.querySelector(".sequence");
         sequenceWidth = firstSequence ? Math.round(firstSequence.getBoundingClientRect().width) : 0;
 
-        if (sequenceWidth > 0 && container.scrollLeft === 0) {
-            container.scrollLeft = sequenceWidth;
+        if (sequenceWidth > 0) {
+            const needed = Math.max(
+                MIN_CLONE_COUNT,
+                Math.ceil((container.clientWidth * 3) / sequenceWidth) + 2
+            );
+
+            if (needed !== cloneCount) {
+                cloneCount = needed;
+                renderSequences(cloneCount);
+                attachImageLoadListeners();
+                const centerBand = Math.floor(cloneCount / 2);
+                container.scrollLeft = sequenceWidth * centerBand;
+                return;
+            }
         }
+
+        if (sequenceWidth > 0 && container.scrollLeft === 0) {
+            const centerBand = Math.floor(cloneCount / 2);
+            container.scrollLeft = sequenceWidth * centerBand;
+        }
+
+        handleInfiniteScroll();
+    }
+
+    function attachImageLoadListeners() {
+        const allImages = Array.from(container.querySelectorAll("img"));
+        allImages.forEach(img => {
+            if (!img.complete) {
+                img.addEventListener("load", updateSequenceWidth, { once: true });
+                img.addEventListener("error", updateSequenceWidth, { once: true });
+            }
+        });
     }
 
     updateSequenceWidth();
-
-    const allImages = Array.from(container.querySelectorAll("img"));
-    allImages.forEach(img => {
-        if (!img.complete) {
-            img.addEventListener("load", updateSequenceWidth, { once: true });
-        }
-    });
+    attachImageLoadListeners();
 
     window.addEventListener("resize", updateSequenceWidth);
 
     if (sequenceWidth > 0) {
-        container.scrollLeft = sequenceWidth;
+        const centerBand = Math.floor(cloneCount / 2);
+        container.scrollLeft = sequenceWidth * centerBand;
     }
 
     container.style.cursor = "pointer";
@@ -197,6 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isDragging) {
             isDragging = false;
             applyMomentum();
+            handleInfiniteScroll();
         } else if (movedDistance <= CLICK_THRESHOLD) {
             if (pointerDownImg && container.contains(pointerDownImg)) {
                 showOverlay(pointerDownImg.src);
@@ -268,10 +304,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function handleInfiniteScroll() {
         if (sequenceWidth <= 0) return;
-        if (container.scrollLeft >= sequenceWidth * 2) {
-            container.scrollLeft -= sequenceWidth;
-        } else if (container.scrollLeft <= 0) {
-            container.scrollLeft += sequenceWidth;
+
+        const wrapSpan = sequenceWidth * Math.max(1, cloneCount - 2);
+        const minScroll = sequenceWidth;
+        const maxScroll = sequenceWidth * Math.max(2, cloneCount - 1);
+
+        while (container.scrollLeft < minScroll) {
+            container.scrollLeft += wrapSpan;
+        }
+
+        while (container.scrollLeft >= maxScroll) {
+            container.scrollLeft -= wrapSpan;
         }
     }
 });
