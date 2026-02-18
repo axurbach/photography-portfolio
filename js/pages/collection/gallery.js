@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const IMAGE_GAP_REM = 1;
     const CLONE_COUNT = 7;
-    const PRELOAD_SEQUENCE_COUNT = 4;
+    const PRELOAD_SEQUENCE_COUNT = 5;
     const CENTER_INDEX = Math.floor(CLONE_COUNT / 2);
     const DRAG_THRESHOLD = 2;
     const CLICK_THRESHOLD = 20;
@@ -71,8 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         debugRaf = requestAnimationFrame(() => {
             debugRaf = 0;
-            const minScroll = sequenceWidth > 0 ? sequenceWidth : 0;
-            const maxScroll = sequenceWidth > 0 ? sequenceWidth * 2 : 0;
+            const minScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX - 1) : 0;
+            const maxScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX + 2) : 0;
             debugOverlay.textContent = [
                 `reason: ${debugReason}`,
                 `slug: ${slug || "none"}`,
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sequence.style.flexShrink = "0";
         sequence.style.gap = `${IMAGE_GAP_REM}rem`;
 
-        const isPrioritySequence = Math.abs(sequenceIndex - CENTER_INDEX) <= 1;
+        const isPrioritySequence = Math.abs(sequenceIndex - CENTER_INDEX) <= 2;
 
         images.forEach(src => {
             const image = document.createElement("img");
@@ -118,30 +118,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function measureSequenceWidth() {
-        const firstSequence = container.querySelector(".sequence");
-        sequenceWidth = firstSequence ? firstSequence.getBoundingClientRect().width : 0;
+        const sequences = container.querySelectorAll(".sequence");
+        if (sequences.length >= 2) {
+            const firstRect = sequences[0].getBoundingClientRect();
+            const secondRect = sequences[1].getBoundingClientRect();
+            sequenceWidth = secondRect.left - firstRect.left;
+        } else {
+            const firstSequence = container.querySelector(".sequence");
+            sequenceWidth = firstSequence ? firstSequence.getBoundingClientRect().width : 0;
+        }
+
+        if (sequenceWidth < 0) {
+            sequenceWidth = Math.abs(sequenceWidth);
+        }
+
         scheduleDebug("measure");
         return sequenceWidth > 0;
     }
 
     function centerStrip() {
         if (sequenceWidth <= 0) return;
-        container.scrollLeft = sequenceWidth * 1.5;
+        container.scrollLeft = sequenceWidth * CENTER_INDEX;
         scheduleDebug("center");
     }
 
     function handleInfiniteScroll() {
         if (sequenceWidth <= 0) return;
 
-        const baseScroll = sequenceWidth;
-        const wrapSpan = sequenceWidth;
+        const minScroll = sequenceWidth * (CENTER_INDEX - 1);
+        const maxScroll = sequenceWidth * (CENTER_INDEX + 2);
         const before = container.scrollLeft;
 
-        const normalized = ((container.scrollLeft - baseScroll) % wrapSpan + wrapSpan) % wrapSpan;
-        const wrappedScrollLeft = baseScroll + normalized;
+        while (container.scrollLeft < minScroll) {
+            container.scrollLeft += sequenceWidth;
+        }
 
-        if (Math.abs(container.scrollLeft - wrappedScrollLeft) > 0.5) {
-            container.scrollLeft = wrappedScrollLeft;
+        while (container.scrollLeft >= maxScroll) {
+            container.scrollLeft -= sequenceWidth;
         }
 
         if (Math.abs(container.scrollLeft - before) > 0.5) {
