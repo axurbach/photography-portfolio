@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!images.length) return;
 
     const IMAGE_GAP_REM = 1;
-    const CLONE_COUNT = 5;
+    const CLONE_COUNT = 7;
     const PRELOAD_SEQUENCE_COUNT = 4;
     const CENTER_INDEX = Math.floor(CLONE_COUNT / 2);
     const DRAG_THRESHOLD = 2;
@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sequence.classList.add("sequence");
         sequence.style.display = "flex";
         sequence.style.flexShrink = "0";
+        sequence.style.gap = `${IMAGE_GAP_REM}rem`;
 
         images.forEach(src => {
             const image = document.createElement("img");
@@ -67,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
             image.decoding = "async";
             image.draggable = false;
             image.style.flexShrink = "0";
-            image.style.marginRight = `${IMAGE_GAP_REM}rem`;
             image.style.cursor = "inherit";
             sequence.appendChild(image);
         });
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function measureSequenceWidth() {
         const firstSequence = container.querySelector(".sequence");
-        sequenceWidth = firstSequence ? Math.round(firstSequence.getBoundingClientRect().width) : 0;
+        sequenceWidth = firstSequence ? firstSequence.getBoundingClientRect().width : 0;
         return sequenceWidth > 0;
     }
 
@@ -97,14 +97,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (sequenceWidth <= 0) return;
 
         const minScroll = sequenceWidth;
-        const maxScroll = sequenceWidth * (CLONE_COUNT - 1);
+        const wrapSpan = sequenceWidth * (CLONE_COUNT - 2);
+        const normalized = ((container.scrollLeft - minScroll) % wrapSpan + wrapSpan) % wrapSpan;
+        const wrappedScrollLeft = minScroll + normalized;
 
-        while (container.scrollLeft < minScroll) {
-            container.scrollLeft += sequenceWidth;
-        }
-
-        while (container.scrollLeft >= maxScroll) {
-            container.scrollLeft -= sequenceWidth;
+        if (Math.abs(container.scrollLeft - wrappedScrollLeft) > 0.5) {
+            container.scrollLeft = wrappedScrollLeft;
         }
     }
 
