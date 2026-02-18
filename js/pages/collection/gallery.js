@@ -28,8 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!images.length) return;
 
     const IMAGE_GAP_REM = 1;
-    const CLONE_COUNT = 7;
-    const PRELOAD_SEQUENCE_COUNT = 5;
+    const CLONE_COUNT = 5;
+    const PRELOAD_SEQUENCE_COUNT = CLONE_COUNT;
     const CENTER_INDEX = Math.floor(CLONE_COUNT / 2);
     const DRAG_THRESHOLD = 2;
     const CLICK_THRESHOLD = 20;
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         debugRaf = requestAnimationFrame(() => {
             debugRaf = 0;
             const minScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX - 1) : 0;
-            const maxScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX + 2) : 0;
+            const maxScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX + 1) : 0;
             debugOverlay.textContent = [
                 `reason: ${debugReason}`,
                 `slug: ${slug || "none"}`,
@@ -93,13 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
         sequence.style.flexShrink = "0";
         sequence.style.gap = `${IMAGE_GAP_REM}rem`;
 
-        const isPrioritySequence = Math.abs(sequenceIndex - CENTER_INDEX) <= 2;
-
         images.forEach(src => {
             const image = document.createElement("img");
             image.src = src;
-            image.loading = isPrioritySequence ? "eager" : "lazy";
-            image.fetchPriority = isPrioritySequence ? "high" : "auto";
+            image.loading = "eager";
+            image.fetchPriority = "high";
             image.decoding = "async";
             image.draggable = false;
             image.style.flexShrink = "0";
@@ -146,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (sequenceWidth <= 0) return;
 
         const minScroll = sequenceWidth * (CENTER_INDEX - 1);
-        const maxScroll = sequenceWidth * (CENTER_INDEX + 2);
+        const maxScroll = sequenceWidth * (CENTER_INDEX + 1);
         const before = container.scrollLeft;
 
         while (container.scrollLeft < minScroll) {
