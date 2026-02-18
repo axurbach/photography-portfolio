@@ -71,8 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         debugRaf = requestAnimationFrame(() => {
             debugRaf = 0;
-            const minScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX - 1) : 0;
-            const maxScroll = sequenceWidth > 0 ? sequenceWidth * (CENTER_INDEX + 1) : 0;
+            const minScroll = sequenceWidth > 0 ? sequenceWidth : 0;
+            const maxScroll = sequenceWidth > 0 ? sequenceWidth * 2 : 0;
             debugOverlay.textContent = [
                 `reason: ${debugReason}`,
                 `slug: ${slug || "none"}`,
@@ -126,23 +126,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function centerStrip() {
         if (sequenceWidth <= 0) return;
-        container.scrollLeft = sequenceWidth * CENTER_INDEX;
+        container.scrollLeft = sequenceWidth * 1.5;
         scheduleDebug("center");
     }
 
     function handleInfiniteScroll() {
         if (sequenceWidth <= 0) return;
 
-        const minScroll = sequenceWidth * (CENTER_INDEX - 1);
-        const maxScroll = sequenceWidth * (CENTER_INDEX + 1);
+        const baseScroll = sequenceWidth;
+        const wrapSpan = sequenceWidth;
         const before = container.scrollLeft;
 
-        while (container.scrollLeft < minScroll) {
-            container.scrollLeft += sequenceWidth;
-        }
+        const normalized = ((container.scrollLeft - baseScroll) % wrapSpan + wrapSpan) % wrapSpan;
+        const wrappedScrollLeft = baseScroll + normalized;
 
-        while (container.scrollLeft >= maxScroll) {
-            container.scrollLeft -= sequenceWidth;
+        if (Math.abs(container.scrollLeft - wrappedScrollLeft) > 0.5) {
+            container.scrollLeft = wrappedScrollLeft;
         }
 
         if (Math.abs(container.scrollLeft - before) > 0.5) {
