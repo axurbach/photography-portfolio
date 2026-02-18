@@ -181,8 +181,8 @@ body.js-hidden .read-story {
     }
 }
 
-/*-------------- mobile styles (≤768px) --------------*/
-@media screen and (max-width: 768px) {
+/*-------------- mobile styles (≤767px) --------------*/
+@media screen and (max-width: 767px) {
     .collection-desc {
         max-width: 300px; 
     }

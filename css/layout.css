@@ -228,7 +228,7 @@ html, body {
     /* stack everything vertically and optimize spacing for small screens */
 
     .main {
-        padding-top: 0;
+        padding-top: 0.75rem;
     }
     
     /* hide desktop navigation */
