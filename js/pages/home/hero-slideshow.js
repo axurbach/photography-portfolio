@@ -14,7 +14,7 @@ const squareNextBtn = document.getElementById("square-next");
 // state
 let currentCollectionIndex = 0;
 let currentImageIndex = 0;
-const duration = 7000;
+const duration = 9000;
 let slideshowInterval = null;
 let isTransitioning = false;
 let activeTransitionId = 0;
@@ -101,7 +101,7 @@ function updateParagraphIndex(transitionId = activeTransitionId) {
         if (transitionId !== activeTransitionId) return;
         paragraphIndexEl.textContent = nextIndexText;
         paragraphIndexEl.classList.remove("fade-out");
-    }, 400);
+    }, 600);
 }
 
 function updateText(transitionId = activeTransitionId) {
@@ -122,7 +122,7 @@ function updateText(transitionId = activeTransitionId) {
         if (transitionId !== activeTransitionId) return;
         paragraphEl.innerHTML = nextHtml;
         paragraphEl.classList.remove("fade-out");
-    }, 400);
+    }, 600);
 }
 
 // ------------ show next image ------------
@@ -143,7 +143,7 @@ function showNextImage() {
         startProgress();
         updateText(transitionId);
         endTransition(transitionId);
-    }, 500);
+    }, 700);
 }
 
 // ------------ square nav link ------------
@@ -155,7 +155,7 @@ function updateLink(transitionId = activeTransitionId) {
         const col = collections[currentCollectionIndex];
         linkEl.innerHTML = `<a href="./collections/${col.file}.html">${col.name}</a>`;
         linkEl.classList.remove("fade-out");
-    }, 200);
+    }, 300);
 }
 
 // ------------ switch collection ------------
