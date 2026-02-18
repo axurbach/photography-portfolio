@@ -15,7 +15,7 @@
     padding: 0 1.5rem;
 }
 
-/*-------------- tablet + mobile styles (≤1024px) --------------*/
+/*-------------- tablet styles (≤1024px) --------------*/
 @media screen and (max-width: 1024px) {
     .self-portrait {
         width: 85vw;
@@ -30,7 +30,14 @@
         height: auto;
         max-height: none;
         aspect-ratio: unset;
-        margin: 2rem 0;
-        padding: 0; /* remove horizontal padding from mobile */
+        margin: 4rem 0;
+        padding: 0;
+    }
+}
+
+/*-------------- mobile styles (≤767px) --------------*/
+@media screen and (max-width: 767px) {
+    .about-info {
+        margin: 3rem 0;
     }
 }
