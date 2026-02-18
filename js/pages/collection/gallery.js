@@ -19,15 +19,18 @@ document.addEventListener("DOMContentLoaded", () => {
         ]
     };
 
-    const currentPage = window.location.pathname;
-    const pageFile = (currentPage.split("/").pop() || "").split("?")[0].split("#")[0];
-    const pageSlug = pageFile.replace(/\.html$/i, "").toLowerCase();
+    const currentPage = window.location.pathname.toLowerCase();
+    const knownSlugs = Object.keys(collectionImages);
+    const pageSlug = knownSlugs.find(slug => {
+        const slugPattern = new RegExp(`(?:^|/)${slug}(?:\\.html)?/?$`, "i");
+        return slugPattern.test(currentPage);
+    }) || "";
     const images = collectionImages[pageSlug] || [];
     const container = document.querySelector(".scroll-container");
     if (!container || !images.length) return;
 
     const IMAGE_GAP_REM = 1;
-    const CLONE_COUNT = 5;
+    const CLONE_COUNT = 9;
     const DRAG_THRESHOLD = 1;
     const CLICK_THRESHOLD = 20;
 
@@ -75,41 +78,53 @@ document.addEventListener("DOMContentLoaded", () => {
         return Promise.allSettled(preloadTasks);
     }
 
+    function centerOnMiddleSequence() {
+        if (sequenceWidth <= 0) return;
+        const centerBand = Math.floor(CLONE_COUNT / 2);
+        container.scrollLeft = sequenceWidth * centerBand;
+    }
+
     function updateSequenceWidth() {
         const firstSequence = container.querySelector(".sequence");
         sequenceWidth = firstSequence ? Math.round(firstSequence.getBoundingClientRect().width) : 0;
 
         if (sequenceWidth > 0 && container.scrollLeft === 0) {
-            const centerBand = Math.floor(CLONE_COUNT / 2);
-            container.scrollLeft = sequenceWidth * centerBand;
+            centerOnMiddleSequence();
         }
 
         handleInfiniteScroll();
+    }
+
+    function ensureReady(attempt = 0) {
+        updateSequenceWidth();
+
+        if (sequenceWidth > 0) {
+            centerOnMiddleSequence();
+            return;
+        }
+
+        if (attempt >= 60) return;
+        requestAnimationFrame(() => ensureReady(attempt + 1));
     }
 
     function attachImageLoadListeners() {
         const allImages = Array.from(container.querySelectorAll("img"));
         allImages.forEach(img => {
             if (!img.complete) {
-                img.addEventListener("load", updateSequenceWidth, { once: true });
-                img.addEventListener("error", updateSequenceWidth, { once: true });
+                img.addEventListener("load", () => ensureReady(), { once: true });
+                img.addEventListener("error", () => ensureReady(), { once: true });
             }
         });
     }
 
     preloadCollectionImages().finally(() => {
-        updateSequenceWidth();
-        requestAnimationFrame(updateSequenceWidth);
+        ensureReady();
     });
 
     attachImageLoadListeners();
 
-    window.addEventListener("resize", updateSequenceWidth);
-
-    if (sequenceWidth > 0) {
-        const centerBand = Math.floor(CLONE_COUNT / 2);
-        container.scrollLeft = sequenceWidth * centerBand;
-    }
+    window.addEventListener("resize", () => ensureReady());
+    window.addEventListener("load", () => ensureReady());
 
     container.addEventListener("scroll", handleInfiniteScroll, { passive: true });
 
@@ -260,6 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     container.addEventListener("touchstart", e => {
+        if (sequenceWidth <= 0) ensureReady();
         const touch = e.touches[0];
         if (!touch) return;
         startInteraction(touch.pageX, touch.clientX, touch.clientY, e.target);
