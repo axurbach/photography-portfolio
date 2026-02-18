@@ -159,6 +159,6 @@
 /*-------------- mobile styles (≤767px) --------------*/
 @media screen and (max-width: 767px) {
     .contact-column {
-        margin-top: 2rem;
+        margin-top: 1rem;
     }
-
+}
