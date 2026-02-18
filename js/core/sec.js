@@ -6,6 +6,9 @@ protectedImageSelectors.forEach(selector => {
     });
 });
 
-window.addEventListener("load", () => {
+function revealBody() {
     document.body.classList.remove("js-hidden");
-});
+}
+
+document.addEventListener("DOMContentLoaded", revealBody, { once: true });
+window.addEventListener("load", revealBody, { once: true });

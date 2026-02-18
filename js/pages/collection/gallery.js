@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     container.scrollLeft = container.scrollWidth / 2;
     container.style.cursor = "pointer";
-    container.style.touchAction = "pan-y";
+    container.style.touchAction = "pan-y pinch-zoom";
 
     // drag & momentum
     let isMouseDown = false, isDragging = false;
@@ -196,20 +196,64 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function handleInfiniteScroll() {
-        const sequences = Array.from(container.querySelectorAll(".sequence"));
-        if (!sequences.length) return;
-        const first = sequences[0];
-        const last = sequences[sequences.length - 1];
-        const containerRect = container.getBoundingClientRect();
-        const seqWidth = first.getBoundingClientRect().width;
+        const firstSequence = container.querySelector(".sequence");
+        if (!firstSequence) return;
 
-        if (first.getBoundingClientRect().right < containerRect.left) {
-            container.appendChild(first);
+        const seqWidth = firstSequence.getBoundingClientRect().width;
+        if (!seqWidth) return;
+
+        const lowerBound = seqWidth * 0.5;
+        const upperBound = seqWidth * (CLONE_COUNT - 1.5);
+
+        if (container.scrollLeft <= lowerBound) {
+            container.scrollLeft += seqWidth;
+        } else if (container.scrollLeft >= upperBound) {
             container.scrollLeft -= seqWidth;
         }
-        if (last.getBoundingClientRect().left > containerRect.right) {
-            container.insertBefore(last, first);
-            container.scrollLeft += seqWidth;
-        }
+    }
+
+    container.addEventListener("scroll", handleInfiniteScroll, { passive: true });
+
+    if (!window.PointerEvent) {
+        container.addEventListener("touchstart", e => {
+            const touch = e.touches[0];
+            isMouseDown = true;
+            startX = touch.pageX;
+            scrollStart = container.scrollLeft;
+            lastX = touch.pageX;
+            velocity = 0;
+            if (momentumID) cancelAnimationFrame(momentumID);
+
+            pointerDownX = touch.clientX;
+            pointerDownY = touch.clientY;
+            pointerDownImg = e.target.closest("img");
+        }, { passive: true });
+
+        container.addEventListener("touchmove", e => {
+            if (!isMouseDown) return;
+            const touch = e.touches[0];
+            const dx = touch.pageX - startX;
+
+            if (!isDragging && Math.abs(dx) > DRAG_THRESHOLD) {
+                isDragging = true;
+            }
+            if (!isDragging) return;
+
+            e.preventDefault();
+            container.scrollLeft = scrollStart - dx;
+            velocity = touch.pageX - lastX;
+            lastX = touch.pageX;
+            handleInfiniteScroll();
+        }, { passive: false });
+
+        container.addEventListener("touchend", () => {
+            if (!isMouseDown) return;
+            isMouseDown = false;
+            if (isDragging) {
+                isDragging = false;
+                applyMomentum();
+            }
+            pointerDownImg = null;
+        }, { passive: true });
     }
 });

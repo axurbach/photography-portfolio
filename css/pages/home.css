@@ -291,6 +291,10 @@
 
 /*-------------- mobile styles --------------*/
 @media screen and (max-width: 767px) {
+    .hero-border {
+        transform: translate(-50%, -50%);
+    }
+
     .center-column {
         width: 85vw;
         height: 85vw;
