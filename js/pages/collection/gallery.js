@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const IMAGE_GAP_REM = 1;
     const CLONE_COUNT = 7;
-    const PRELOAD_SEQUENCE_COUNT = 4;
+    const PRELOAD_SEQUENCE_COUNT = CLONE_COUNT;
     const CENTER_INDEX = Math.floor(CLONE_COUNT / 2);
     const DRAG_THRESHOLD = 2;
     const CLICK_THRESHOLD = 20;
@@ -96,13 +96,15 @@ document.addEventListener("DOMContentLoaded", () => {
     function handleInfiniteScroll() {
         if (sequenceWidth <= 0) return;
 
-        const minScroll = sequenceWidth;
-        const wrapSpan = sequenceWidth * (CLONE_COUNT - 2);
-        const normalized = ((container.scrollLeft - minScroll) % wrapSpan + wrapSpan) % wrapSpan;
-        const wrappedScrollLeft = minScroll + normalized;
+        const minScroll = sequenceWidth * (CENTER_INDEX - 1);
+        const maxScroll = sequenceWidth * (CENTER_INDEX + 1);
 
-        if (Math.abs(container.scrollLeft - wrappedScrollLeft) > 0.5) {
-            container.scrollLeft = wrappedScrollLeft;
+        while (container.scrollLeft < minScroll) {
+            container.scrollLeft += sequenceWidth;
+        }
+
+        while (container.scrollLeft >= maxScroll) {
+            container.scrollLeft -= sequenceWidth;
         }
     }
 
