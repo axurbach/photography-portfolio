@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const IMAGE_GAP_REM = 1;
     const CLONE_COUNT = 7;
-    const PRELOAD_SEQUENCE_COUNT = CLONE_COUNT;
+    const PRELOAD_SEQUENCE_COUNT = 4;
     const CENTER_INDEX = Math.floor(CLONE_COUNT / 2);
     const DRAG_THRESHOLD = 2;
     const CLICK_THRESHOLD = 20;
@@ -54,17 +54,20 @@ document.addEventListener("DOMContentLoaded", () => {
     container.style.cursor = "pointer";
     container.style.touchAction = "pan-y";
 
-    function createSequence() {
+    function createSequence(sequenceIndex) {
         const sequence = document.createElement("div");
         sequence.classList.add("sequence");
         sequence.style.display = "flex";
         sequence.style.flexShrink = "0";
         sequence.style.gap = `${IMAGE_GAP_REM}rem`;
 
+        const isPrioritySequence = Math.abs(sequenceIndex - CENTER_INDEX) <= 1;
+
         images.forEach(src => {
             const image = document.createElement("img");
             image.src = src;
-            image.loading = "eager";
+            image.loading = isPrioritySequence ? "eager" : "lazy";
+            image.fetchPriority = isPrioritySequence ? "high" : "auto";
             image.decoding = "async";
             image.draggable = false;
             image.style.flexShrink = "0";
@@ -78,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderSequences() {
         container.innerHTML = "";
         for (let index = 0; index < CLONE_COUNT; index += 1) {
-            container.appendChild(createSequence());
+            container.appendChild(createSequence(index));
         }
     }
 
