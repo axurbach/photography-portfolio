@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 600);
         };
 
-        const queueFade = () => window.setTimeout(startFade, 2500);
+        const queueFade = () => window.setTimeout(startFade, 2300);
 
         if (document.readyState === "complete") {
             queueFade();
