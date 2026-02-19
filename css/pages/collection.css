@@ -113,6 +113,39 @@ body.js-hidden .read-story {
     -webkit-tap-highlight-color: transparent;
 }
 
+.gallery-loading-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 1;
+}
+
+.gallery-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+}
+
+.gallery-lightbox-image {
+    max-width: 75%;
+    max-height: 75%;
+    cursor: zoom-out;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
 /*-------------- desktop collection page scrolling/expanding --------------*/
 @media screen and (min-width: 1025px) {
     body.collection-expanded {

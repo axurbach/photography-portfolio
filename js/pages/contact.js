@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = messageInput?.value.trim() || '';
 
             if (!name || !email || !message) {
-                alert('Please fill in all fields.');
+                alert('please fill in all fields.');
                 return;
             }
 
@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    alert(`Thanks, ${name}! Your message has been sent.`);
+                    alert(`thanks, ${name}! your message has been sent.`);
                     contactForm.reset();
                 } else {
-                    alert('Oops! There was a problem submitting your message.');
+                    alert('oops! there was a problem submitting your message.');
                 }
             } catch (error) {
-                alert('Oops! Network error. Please try again.');
+                alert('oops! network error. please try again.');
             }
         });
     }

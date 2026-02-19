@@ -56,8 +56,8 @@ const collections = [
         name: "[ view collection :: berlin56 ]",
         images: [
             "./assets/images/collections/berlin56/berlin56-1.jpg",
-            "./assets/images/collections/berlin56/berlin56-2.jpg",
-            "./assets/images/collections/berlin56/berlin56-5.jpg"
+            "./assets/images/collections/berlin56/berlin56-2-c.jpg",
+            "./assets/images/collections/berlin56/berlin56-5-c.jpg"
         ],
         texts: [
             [ "the berlin56 collection took place at berlin nightclub, a vibrant 3-floor venue in the heart of 56 byward market", "djs including chism, lx and anthony cole performed at the nokturnal event" ],

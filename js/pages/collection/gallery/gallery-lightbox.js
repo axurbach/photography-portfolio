@@ -1,10 +1,10 @@
 (function () {
     function createGalleryLightbox() {
         const overlay = document.createElement("div");
-        overlay.style.cssText = "position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); z-index: 9999;";
+        overlay.className = "gallery-lightbox-overlay";
 
         const image = document.createElement("img");
-        image.style.cssText = "max-width: 75%; max-height: 75%; cursor: zoom-out; user-select: none; -webkit-user-select: none;";
+        image.className = "gallery-lightbox-image";
         image.draggable = false;
         overlay.appendChild(image);
         document.body.appendChild(overlay);

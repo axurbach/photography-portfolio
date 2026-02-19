@@ -53,23 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     const loadingOverlay = document.createElement("div");
+    loadingOverlay.className = "gallery-loading-overlay";
     loadingOverlay.textContent = isDesktop
         ? "drag or scroll through the images to browse"
         : "swipe through the images to browse";
-    Object.assign(loadingOverlay.style, {
-        position: "absolute",
-        inset: "0",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#000",
-        color: "#fff",
-        fontSize: "14px",
-        textAlign: "center",
-        zIndex: "3",
-        pointerEvents: "none",
-        opacity: "1"
-    });
     container.appendChild(loadingOverlay);
     let overlayDismissScheduled = false;
     let overlayInteractionLocked = true;

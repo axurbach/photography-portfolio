@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobileMenu = document.getElementById("mobile-menu");
 
     if (!hamburger || !mobileMenu) {
-        console.error("Hamburger or mobile menu not found.");
+        console.error("hamburger or mobile menu not found.");
         return;
     }
 
