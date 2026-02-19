@@ -33,6 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const CENTER_INDEX = Math.floor(CLONE_COUNT / 2);
     const DRAG_THRESHOLD = 2;
     const CLICK_THRESHOLD = 20;
+    const USE_REDUCED_STRIP_QUALITY = window.innerWidth <= 1024;
+    const STRIP_QUALITY = 0.3;
+    const STRIP_SCALE = 0.6;
     const SHOW_DEBUG = window.location.search.includes("galleryDebug=1") || window.innerWidth <= 1024;
 
     let sequenceWidth = 0;
@@ -52,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let wrapEventCount = 0;
     let debugRaf = 0;
     let debugReason = "init";
+    let stripSources = [...images];
 
     container.style.visibility = "hidden";
     container.style.opacity = "0";
@@ -96,9 +100,10 @@ document.addEventListener("DOMContentLoaded", () => {
         sequence.style.height = "100%";
         sequence.style.gap = `${IMAGE_GAP_REM}rem`;
 
-        images.forEach(src => {
+        stripSources.forEach((src, index) => {
             const image = document.createElement("img");
             image.src = src;
+            image.dataset.fullSrc = images[index];
             image.loading = "eager";
             image.fetchPriority = "high";
             image.decoding = "async";
@@ -205,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function preloadImages() {
-        const sources = Array.from({ length: PRELOAD_SEQUENCE_COUNT }, () => images).flat();
+        const sources = Array.from({ length: PRELOAD_SEQUENCE_COUNT }, () => stripSources).flat();
 
         const preloadTasks = sources.map(src => {
             const preloadImage = new Image();
@@ -215,6 +220,51 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         await Promise.all(preloadTasks);
+    }
+
+    function loadImage(src) {
+        return new Promise((resolve, reject) => {
+            const image = new Image();
+            image.decoding = "async";
+            image.onload = () => resolve(image);
+            image.onerror = reject;
+            image.src = src;
+        });
+    }
+
+    function canvasToBlob(canvas, quality) {
+        return new Promise(resolve => {
+            canvas.toBlob(blob => resolve(blob), "image/jpeg", quality);
+        });
+    }
+
+    async function buildReducedStripSources() {
+        if (!USE_REDUCED_STRIP_QUALITY) return;
+
+        const reducedSources = await Promise.all(images.map(async src => {
+            try {
+                const image = await loadImage(src);
+                const scaledWidth = Math.max(1, Math.round(image.naturalWidth * STRIP_SCALE));
+                const scaledHeight = Math.max(1, Math.round(image.naturalHeight * STRIP_SCALE));
+
+                const canvas = document.createElement("canvas");
+                canvas.width = scaledWidth;
+                canvas.height = scaledHeight;
+
+                const context = canvas.getContext("2d");
+                if (!context) return src;
+
+                context.drawImage(image, 0, 0, scaledWidth, scaledHeight);
+                const blob = await canvasToBlob(canvas, STRIP_QUALITY);
+                if (!blob) return src;
+
+                return URL.createObjectURL(blob);
+            } catch {
+                return src;
+            }
+        }));
+
+        stripSources = reducedSources;
     }
 
     const overlay = document.createElement("div");
@@ -335,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
             isDragging = false;
             applyMomentum();
         } else if (movedDistance <= CLICK_THRESHOLD && pointerDownImage && container.contains(pointerDownImage)) {
-            showOverlay(pointerDownImage.src);
+            showOverlay(pointerDownImage.dataset.fullSrc || pointerDownImage.src);
         }
 
         pointerDownImage = null;
@@ -423,6 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     (async () => {
+        await buildReducedStripSources();
         await preloadImages();
         renderSequences();
 
