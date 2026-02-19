@@ -27,8 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const images = slug ? collectionImages[slug] : [];
     if (!images.length) return;
 
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
     const IMAGE_GAP_REM = 1;
-    const CLONE_COUNT = 5;
+    const CLONE_COUNT = isIOS ? 3 : 5;
     const PRELOAD_SEQUENCE_COUNT = CLONE_COUNT;
     const CENTER_INDEX = Math.floor(CLONE_COUNT / 2);
     const DRAG_THRESHOLD = 2;
@@ -36,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const USE_REDUCED_STRIP_QUALITY = window.innerWidth <= 1024;
     const STRIP_QUALITY = 0.3;
     const STRIP_SCALE = 0.6;
-    const SHOW_DEBUG = window.location.search.includes("galleryDebug=1") || window.innerWidth <= 1024;
+    const SHOW_DEBUG = window.location.search.includes("galleryDebug=1");
 
     let sequenceWidth = 0;
     let isPointerDown = false;
@@ -105,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
             image.src = src;
             image.dataset.fullSrc = images[index];
             image.loading = "eager";
-            image.fetchPriority = "high";
+            image.fetchPriority = "auto";
             image.decoding = "async";
             image.draggable = false;
             image.style.display = "block";
