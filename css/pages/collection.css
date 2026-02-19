@@ -183,6 +183,11 @@ body.js-hidden .read-story {
 
 /*-------------- mobile styles (≤767px) --------------*/
 @media screen and (max-width: 767px) {
+    .collection-content {
+        min-height: calc(100dvh - 11rem);
+        justify-content: center;
+    }
+
     .collection-desc {
         max-width: 300px; 
     }
