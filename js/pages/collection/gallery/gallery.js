@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     Object.assign(container.style, {
         position: "relative",
-        cursor: "pointer",
+        cursor: "default",
         touchAction: "pan-y"
     });
 
@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     container.appendChild(loadingOverlay);
     let overlayDismissScheduled = false;
+    let overlayInteractionLocked = true;
 
     function scheduleOverlayDismissFromPageLoad() {
         if (overlayDismissScheduled) return;
@@ -79,6 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const startFade = () => {
             if (!loadingOverlay.parentNode) return;
+            overlayInteractionLocked = false;
+            container.style.cursor = "pointer";
             loadingOverlay.style.transition = "opacity 0.6s ease";
             loadingOverlay.style.opacity = "0";
 
@@ -89,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 600);
         };
 
-        const queueFade = () => window.setTimeout(startFade, 2300);
+        const queueFade = () => window.setTimeout(startFade, 1800);
 
         if (document.readyState === "complete") {
             queueFade();
@@ -101,9 +104,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     scheduleOverlayDismissFromPageLoad();
 
+    const isOverlayVisible = () => Boolean(loadingOverlay.parentNode);
+    const isInteractionLocked = () => overlayInteractionLocked;
+
     const normalizeScroll = value => state.sequenceWidth <= 0 ? 0 : ((value % state.sequenceWidth) + state.sequenceWidth) % state.sequenceWidth;
 
     function syncVirtualFromDom() {
+        if (isInteractionLocked()) {
+            if (container.scrollLeft !== 0) container.scrollLeft = 0;
+            state.virtualScroll = 0;
+            return;
+        }
         if (state.sequenceWidth <= 0) return;
         const before = container.scrollLeft;
         const normalized = normalizeScroll(before);
@@ -186,6 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function startInteraction(pageX, clientX, clientY, target) {
+        if (isInteractionLocked()) return;
         state.isPointerDown = true;
         state.isDragging = false;
         state.startX = pageX;
@@ -240,7 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         state.pointerDownImage = null;
-        container.style.cursor = "pointer";
+        container.style.cursor = isInteractionLocked() ? "default" : "pointer";
         document.body.style.cursor = "";
     }
 
@@ -290,6 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     container.addEventListener("wheel", event => {
         event.preventDefault();
+        if (isInteractionLocked()) return;
         setVirtualScroll(state.virtualScroll + event.deltaY);
     });
 
