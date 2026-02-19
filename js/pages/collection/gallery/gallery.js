@@ -75,8 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Object.assign(sequence.style, {
             display: "flex",
             flexShrink: "0",
-            height: "100%",
-            gap: `${config.gapRem}rem`
+            height: "100%"
         });
         sequence.classList.add("sequence");
 
@@ -93,7 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 height: "100%",
                 width: "auto",
                 flexShrink: "0",
-                cursor: "inherit"
+                cursor: "inherit",
+                marginRight: `${config.gapRem}rem`
             });
             sequence.appendChild(image);
         });
