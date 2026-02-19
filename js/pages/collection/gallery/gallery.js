@@ -50,8 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
         touchAction: "pan-y"
     });
 
+    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
     const loadingOverlay = document.createElement("div");
-    loadingOverlay.textContent = "swipe through the images to browse";
+    loadingOverlay.textContent = isDesktop
+        ? "drag or scroll through the images to browse"
+        : "swipe through the images to browse";
     Object.assign(loadingOverlay.style, {
         position: "absolute",
         inset: "0",
