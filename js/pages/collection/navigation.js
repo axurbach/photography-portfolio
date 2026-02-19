@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     readBtn?.addEventListener("click", () => {
         extraContent?.classList.toggle("show");
         const isExpanded = extraContent?.classList.contains("show");
-        readBtn.textContent = isExpanded ? "hide description" : "read description";
+        readBtn.textContent = isExpanded ? "[ hide description ]" : "[ read description ]";
         syncExpandedState();
 
         if (isExpanded) {

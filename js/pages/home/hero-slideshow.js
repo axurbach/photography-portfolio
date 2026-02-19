@@ -39,7 +39,7 @@ function endTransition(transitionId) {
 const collections = [
     {
         file: "bassvictim",
-        name: "view collection :: bassvictim",
+        name: "[ view collection :: bassvictim ]",
         images: [
             "./assets/images/collections/bassvictim/bassvictim-1.jpg",
             "./assets/images/collections/bassvictim/bassvictim-2-c.jpg",
@@ -53,7 +53,7 @@ const collections = [
     },
     {
         file: "berlin56",
-        name: "view collection :: berlin56",
+        name: "[ view collection :: berlin56 ]",
         images: [
             "./assets/images/collections/berlin56/berlin56-1.jpg",
             "./assets/images/collections/berlin56/berlin56-2.jpg",

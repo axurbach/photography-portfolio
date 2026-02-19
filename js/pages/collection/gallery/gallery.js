@@ -45,12 +45,57 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     Object.assign(container.style, {
-        visibility: "hidden",
-        opacity: "0",
-        transition: "opacity 220ms ease",
+        position: "relative",
         cursor: "pointer",
         touchAction: "pan-y"
     });
+
+    const loadingOverlay = document.createElement("div");
+    loadingOverlay.textContent = "swipe through the images to browse";
+    Object.assign(loadingOverlay.style, {
+        position: "absolute",
+        inset: "0",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#000",
+        color: "#fff",
+        fontSize: "14px",
+        textAlign: "center",
+        zIndex: "3",
+        pointerEvents: "none",
+        opacity: "1"
+    });
+    container.appendChild(loadingOverlay);
+    let overlayDismissScheduled = false;
+
+    function scheduleOverlayDismissFromPageLoad() {
+        if (overlayDismissScheduled) return;
+        overlayDismissScheduled = true;
+
+        const startFade = () => {
+            if (!loadingOverlay.parentNode) return;
+            loadingOverlay.style.transition = "opacity 0.6s ease";
+            loadingOverlay.style.opacity = "0";
+
+            window.setTimeout(() => {
+                if (loadingOverlay.parentNode) {
+                    loadingOverlay.remove();
+                }
+            }, 600);
+        };
+
+        const queueFade = () => window.setTimeout(startFade, 2500);
+
+        if (document.readyState === "complete") {
+            queueFade();
+            return;
+        }
+
+        window.addEventListener("load", queueFade, { once: true });
+    }
+
+    scheduleOverlayDismissFromPageLoad();
 
     const normalizeScroll = value => state.sequenceWidth <= 0 ? 0 : ((value % state.sequenceWidth) + state.sequenceWidth) % state.sequenceWidth;
 
@@ -102,9 +147,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function renderSequences() {
-        container.innerHTML = "";
+        container.querySelectorAll(".sequence").forEach(sequence => sequence.remove());
         for (let index = 0; index < config.cloneCount; index += 1) {
             container.appendChild(createSequence());
+        }
+        if (loadingOverlay.parentNode) {
+            container.appendChild(loadingOverlay);
         }
     }
 
@@ -123,8 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function revealStrip() {
         setVirtualScroll(0);
-        container.style.visibility = "visible";
-        container.style.opacity = "1";
     }
 
     const lightbox = createGalleryLightbox();
