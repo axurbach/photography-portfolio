@@ -38,6 +38,20 @@ function endTransition(transitionId) {
 // ------------ collections data ------------
 const collections = [
     {
+        file: "malibu",
+        name: "[ view collection :: malibu ]",
+        images: [
+            "./assets/images/collections/malibu/malibu-3.jpg",
+            "./assets/images/collections/malibu/malibu-c-1.jpg",
+            "./assets/images/collections/malibu/malibu-6.jpg"
+        ],
+        texts: [
+            [ "French ambient composer and vocalist Malibu is known for her immersive electronic soundscapes and cinematic live performances", "Her debut album Vanities, released in 2025 on the Stockholm label YEAR0001, features thirteen ambient compositions blending wordless vocals and drifting synth textures" ],
+            [ "The 2026 show took place at Society for Arts and Technology in Montreal and included supporting performances from ESP, Isla Den, and s1obhan", "Their performances moved between ambient textures, distorted pop structures and original music" ],
+            [ "Every photo in this series reflects the meditative atmosphere of the main performance", "Soft light, drifting textures, and the emotional weight that filled the room" ]
+        ]
+    },
+    {
         file: "bassvictim",
         name: "[ view collection :: bassvictim ]",
         images: [
@@ -46,9 +60,9 @@ const collections = [
             "./assets/images/collections/bassvictim/bassvictim-6.jpg"
         ],
         texts: [
-            [ "bassvictim is a london-based electronic music duo made up of vocalist and songwriter maria manow and producer ike clateman", "they first connected in berlin in 2022 and later solidified their collaboration in south london, outside the club peckham audio" ],
-            [ "their music blends elements of electronic, electroclash, and bass-driven productions", "since releasing their first single in 2023, they've built a presence in underground electronic scenes with energetic live performances and subsequent releases" ],
-            [ "this photo collection focuses on the 2025 bassvictim show, live at bar le ritz pdb", "every photo has been carefully edited to capture the weight of the bass, the flicker of the stage lights, and the energy of the crowd" ]
+            [ "Bassvictim is a London-based electronic music duo made up of vocalist and songwriter Maria Manow and producer Ike Clateman", "They first connected in Berlin in 2022 and later solidified their collaboration in South London, outside the club Peckham Audio" ],
+            [ "Their music blends elements of electronic, electroclash, and bass-driven productions", "Since releasing their first single in 2023, they've built a presence in underground electronic scenes with energetic live performances and subsequent releases" ],
+            [ "This photo collection focuses on the 2025 Bassvictim show, live at Bar Le Ritz PDB", "Every photo has been carefully edited to capture the weight of the bass, the flicker of the stage lights, and the energy of the crowd" ]
         ]
     },
     {
@@ -60,7 +74,7 @@ const collections = [
             "./assets/images/collections/berlin56/berlin56-5-c.jpg"
         ],
         texts: [
-            [ "the berlin56 collection took place at berlin nightclub, a vibrant 3-floor venue in the heart of 56 byward market", "djs including chism, lx and anthony cole performed at the nokturnal event" ],
+            [ "The berlin56 collection took place at Berlin Nightclub, a vibrant 3-floor venue in the heart of 56 Byward Market", "DJs including Chism, LX and Anthony Cole performed at the Nokturnal event" ],
         ]
     }
 ];
