@@ -42,7 +42,7 @@ const collections = [
         name: "[ view collection :: malibu ]",
         images: [
             "./assets/images/collections/malibu/malibu-3.jpg",
-            "./assets/images/collections/malibu/malibu-c-1.jpg",
+            "./assets/images/collections/malibu/malibu-c-2.jpg",
             "./assets/images/collections/malibu/malibu-6.jpg"
         ],
         texts: [
