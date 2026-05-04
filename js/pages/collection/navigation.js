@@ -43,9 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("load", updateExpandedHeight);
 
     const collectionPages = [
+        "mechatok.html",
         "malibu.html",
-        "bassvictim.html",
-        "berlin56.html"
+        "bassvictim.html"
     ];
 
     const currentPage = window.location.pathname.split("/").pop();

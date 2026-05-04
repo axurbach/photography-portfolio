@@ -19,11 +19,14 @@ window.COLLECTION_IMAGES = {
         "../assets/images/collections/bassvictim/bassvictim-7.jpg",
         "../assets/images/collections/bassvictim/bassvictim-8.jpg"
     ],
-    berlin56: [
-        "../assets/images/collections/berlin56/berlin56-1.jpg",
-        "../assets/images/collections/berlin56/berlin56-2.jpg",
-        "../assets/images/collections/berlin56/berlin56-3.jpg",
-        "../assets/images/collections/berlin56/berlin56-4.jpg",
-        "../assets/images/collections/berlin56/berlin56-5.jpg"
+    mechatok: [
+        "../assets/images/collections/mechatok/mechatok-1.jpg",
+        "../assets/images/collections/mechatok/mechatok-2.jpg",
+        "../assets/images/collections/mechatok/mechatok-3.jpg",
+        "../assets/images/collections/mechatok/mechatok-4.jpg",
+        "../assets/images/collections/mechatok/mechatok-5.jpg",
+        "../assets/images/collections/mechatok/mechatok-6.jpg",
+        "../assets/images/collections/mechatok/mechatok-7.jpg",
+        "../assets/images/collections/mechatok/mechatok-8.jpg"
     ]
 };

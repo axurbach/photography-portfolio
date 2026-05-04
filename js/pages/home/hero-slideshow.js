@@ -38,6 +38,20 @@ function endTransition(transitionId) {
 // ------------ collections data ------------
 const collections = [
     {
+        file: "mechatok",
+        name: "[ view collection :: mechatok ]",
+        images: [
+            "./assets/images/collections/mechatok/mechatok-1-c.jpg",
+            "./assets/images/collections/mechatok/mechatok-4-c.jpg",
+            "./assets/images/collections/mechatok/mechatok-6-c.jpg"
+        ],
+        texts: [
+            [ "Munich-born producer Mechatok brought his Wide Awake tour to Bar Le Ritz PDB for a focused, high-energy show at one of Montreal's most beloved live venues", "Mechatok has shaped his sound through years of collaboration with Drain Gang and through Natural Mind, his London-based event series connecting electronic pop, club music and the artists around it" ],
+            [ "Wide Awake, his debut solo album released in August 2025, expands on Mechatok's sound through polished dance-pop and trance-influenced rhythms", "The set moved through glossy textures, bright melodic sections and the melancholic euphoria that runs through his solo and collaborative work" ],
+            [ "The night also featured an appearance from Isabella Lovestory, the Montreal-based neoperreo artist who joined him onstage to perform \"She's a Director\", one of Wide Awake's featured collaborations", "Saturated light, dynamic text-heavy visuals and the album's vivid live presentation shaped this collection" ]
+        ]
+    },
+    {
         file: "malibu",
         name: "[ view collection :: malibu ]",
         images: [
@@ -63,18 +77,6 @@ const collections = [
             [ "Bassvictim is a London-based electronic music duo made up of vocalist and songwriter Maria Manow and producer Ike Clateman", "They first connected in Berlin in 2022 and later solidified their collaboration in South London, outside the club Peckham Audio" ],
             [ "Their music blends elements of electronic, electroclash, and bass-driven productions", "Since releasing their first single in 2023, they've built a presence in underground electronic scenes with energetic live performances and subsequent releases" ],
             [ "This photo collection focuses on the 2025 Bassvictim show, live at Bar Le Ritz PDB", "Every photo has been carefully edited to capture the weight of the bass, the flicker of the stage lights, and the energy of the crowd" ]
-        ]
-    },
-    {
-        file: "berlin56",
-        name: "[ view collection :: berlin56 ]",
-        images: [
-            "./assets/images/collections/berlin56/berlin56-1.jpg",
-            "./assets/images/collections/berlin56/berlin56-2-c.jpg",
-            "./assets/images/collections/berlin56/berlin56-5-c.jpg"
-        ],
-        texts: [
-            [ "The berlin56 collection took place at Berlin Nightclub, a vibrant 3-floor venue in the heart of 56 Byward Market", "DJs including Chism, LX and Anthony Cole performed at the Nokturnal event" ],
         ]
     }
 ];
