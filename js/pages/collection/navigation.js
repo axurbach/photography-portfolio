@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const collectionPages = [
         "mechatok.html",
+        "17sport.html",
         "malibu.html",
         "bassvictim.html"
     ];

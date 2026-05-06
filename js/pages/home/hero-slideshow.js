@@ -52,6 +52,20 @@ const collections = [
         ]
     },
     {
+        file: "17sport",
+        name: "[ view collection :: 17sport ]",
+        images: [
+            "./assets/images/collections/17sport/17sport-3-c.jpg",
+            "./assets/images/collections/17sport/17sport-1-c.jpg",
+            "./assets/images/collections/17sport/17sport-6-c.jpg"
+        ],
+        texts: [
+            [ "17sport is a Montreal duo composed of Iris Lou Dune and Del Renee Vise, two bilingual multidisciplinary artists who formed the project in 2024", "Working as musicians and producers, they build songs in GarageBand with distortion, sound transformation and a raw DIY approach at the center of their process" ],
+            [ "17sport acts as the duo's main artistic outlet, bringing together music, photography, performance, film, fashion and design inside the same world", "Their sound layers soaring vocals with jagged synth lines and heavy bass, travelling through uncertainty, hope and the pursuit of freedom" ],
+            [ "There is tension in their work between tenderness and rage, drawing from an experimental electronic lineage that recalls Ladytron, ear, Bassvictim and Katiejane Garside", "This collection captures 17sport performing at Rainbow Bistro in Ottawa as they move toward a second album, with new singles already arriving in the lead-up" ]
+        ]
+    },
+    {
         file: "malibu",
         name: "[ view collection :: malibu ]",
         images: [

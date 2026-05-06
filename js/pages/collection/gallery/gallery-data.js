@@ -1,4 +1,12 @@
 window.COLLECTION_IMAGES = {
+    "17sport": [
+        "../assets/images/collections/17sport/17sport-1.jpg",
+        "../assets/images/collections/17sport/17sport-2.jpg",
+        "../assets/images/collections/17sport/17sport-3.jpg",
+        "../assets/images/collections/17sport/17sport-4.jpg",
+        "../assets/images/collections/17sport/17sport-5.jpg",
+        "../assets/images/collections/17sport/17sport-6.jpg",
+    ],
     malibu: [
         "../assets/images/collections/malibu/malibu-1.jpg",
         "../assets/images/collections/malibu/malibu-2.jpg",
