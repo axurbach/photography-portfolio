@@ -34,7 +34,6 @@ window.COLLECTION_IMAGES = {
         "../assets/images/collections/mechatok/mechatok-4.jpg",
         "../assets/images/collections/mechatok/mechatok-5.jpg",
         "../assets/images/collections/mechatok/mechatok-6.jpg",
-        "../assets/images/collections/mechatok/mechatok-7.jpg",
         "../assets/images/collections/mechatok/mechatok-8.jpg"
     ]
 };
