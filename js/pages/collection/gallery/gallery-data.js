@@ -35,5 +35,15 @@ window.COLLECTION_IMAGES = {
         "../assets/images/collections/mechatok/mechatok-5.jpg",
         "../assets/images/collections/mechatok/mechatok-6.jpg",
         "../assets/images/collections/mechatok/mechatok-8.jpg"
+    ],
+    evanoraunlimited: [
+        "../assets/images/collections/evanora-unlimited/evanora-unlimited-1.jpg",
+        "../assets/images/collections/evanora-unlimited/evanora-unlimited-2.jpg",
+        "../assets/images/collections/evanora-unlimited/evanora-unlimited-3.jpg",
+        "../assets/images/collections/evanora-unlimited/evanora-unlimited-4.jpg",
+        "../assets/images/collections/evanora-unlimited/evanora-unlimited-5.jpg",
+        "../assets/images/collections/evanora-unlimited/evanora-unlimited-6.jpg",
+        "../assets/images/collections/evanora-unlimited/evanora-unlimited-7.jpg",
+        "../assets/images/collections/evanora-unlimited/evanora-unlimited-8.jpg"
     ]
 };

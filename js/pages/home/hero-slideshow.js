@@ -38,6 +38,20 @@ function endTransition(transitionId) {
 // ------------ collections data ------------
 const collections = [
     {
+        file: "evanoraunlimited",
+        name: "[ view collection :: evanora unlimited ]",
+        images: [
+            "./assets/images/collections/evanora-unlimited/evanora-unlimited-1-c.jpg",
+            "./assets/images/collections/evanora-unlimited/evanora-unlimited-3-c.jpg",
+            "./assets/images/collections/evanora-unlimited/evanora-unlimited-5-c.jpg"
+        ],
+        texts: [
+            [ "Evanora Unlimited is a multi-medium project from Oakland artist Orion Ohana, built around music, film, fashion, illustration and performance art", "Raised on the underground rave scene from infancy with both parents DJs, Ohana has spent years in the scene internationally, building a body of work that resists categorization" ],
+            [ "The Montreal show at Société des Arts Technologiques was a co-headlining night alongside Elias Rønnenfelt, with John FM also on the bill", "The set pulled from Evanora and Marjorie W.C. Sinclair, his rap-oriented side alias, for a focused hybrid performance" ],
+            [ "Crowd interaction ran through the whole show and fan favourites like Dibiyu brought the room together", "This series showcases the ritualized intensity of the performance, accentuating Evanora Unlimited's style and the emotional resonance of each moment" ]
+        ]
+    },
+    {
         file: "mechatok",
         name: "[ view collection :: mechatok ]",
         images: [
@@ -66,7 +80,7 @@ const collections = [
         ]
     },
     {
-        file: "malibu",
+        file: "malibu", 
         name: "[ view collection :: malibu ]",
         images: [
             "./assets/images/collections/malibu/malibu-3.jpg",
