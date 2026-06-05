@@ -43,9 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("load", updateExpandedHeight);
 
     const collectionPages = [
+        "evanoraunlimited.html",
         "mechatok.html",
         "17sport.html",
-        "evanoraunlimited.html",
         "malibu.html",
         "bassvictim.html"
     ];

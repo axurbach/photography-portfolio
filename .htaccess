@@ -1,0 +1,20 @@
+﻿# Enable clean URLs for static pages
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
+
+# Redirect legacy .html requests to clean paths
+RewriteCond %{THE_REQUEST} /index\.html [NC]
+RewriteRule ^index\.html$ /home [R=301,L]
+RewriteCond %{THE_REQUEST} /about\.html [NC]
+RewriteRule ^about\.html$ /about [R=301,L]
+RewriteCond %{THE_REQUEST} /contact\.html [NC]
+RewriteRule ^contact\.html$ /contact [R=301,L]
+RewriteCond %{THE_REQUEST} /collections/([^/]+)\.html [NC]
+RewriteRule ^collections/([^/]+)\.html$ /collections/$1 [R=301,L]
+
+# Serve clean URLs
+RewriteRule ^home/?$ index.html [L]
+RewriteRule ^about/?$ about.html [L]
+RewriteRule ^contact/?$ contact.html [L]
+RewriteRule ^collections/([^/]+)/?$ collections/$1.html [L]
