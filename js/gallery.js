@@ -43,7 +43,9 @@ function scale() {
 
 function layout() {
   const mobile = mq.matches, rc = ring.parentElement.getBoundingClientRect();
-  const D = Math.max(200, mobile ? Math.min(660, rc.width - 32, innerHeight * .5) : CIRCLE * scale());
+  const D = mobile
+    ? Math.max(100, Math.min(660, rc.width * .78, innerHeight * .32))
+    : Math.max(200, CIRCLE * scale());
   R = D / 2; ring.style.width = ring.style.height = D + "px";
   const n = items.length;
   items.forEach(o => { o.u = Math.min(Math.sqrt(o.ar), 1 / Math.sqrt(o.ar)) * o.k; });
