@@ -1,8 +1,6 @@
 User-agent: *
 Allow: /
 
-# Sitemap
 Sitemap: https://17099450a.com/sitemap.xml
 
-# Keep archive and development files out of search
 Disallow: /archive/
