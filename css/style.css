@@ -84,3 +84,4 @@ a:focus-visible,button:focus-visible,.ring:focus-visible,.pv img:focus-visible{o
 .contact-email,.contact-email *{-webkit-user-select:text;user-select:text}
 .contact-email{margin:12px 0 0;font-size:13px;line-height:1.4;text-align:center}
 .contact-email a{color:inherit;text-underline-offset:3px}
+@media (max-width:768px),(max-aspect-ratio:4/5){.contact-page .content-main{align-items:flex-start;padding:84px 24px 24px}}
