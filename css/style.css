@@ -51,16 +51,14 @@ body.ready .pv img,body.ready .ring,body.ready .it{opacity:1}
 @keyframes menu-fade-in{from{opacity:0}to{opacity:1}}
 @keyframes menu-icon-open-first{from{transform:translateY(0) rotate(0)}to{transform:translateY(3px) rotate(45deg)}}
 @keyframes menu-icon-open-last{from{transform:translateY(0) rotate(0)}to{transform:translateY(-3px) rotate(-45deg)}}
-@keyframes contact-fade-in{from{opacity:0}to{opacity:1}}
 main{height:100%}
 .ring,.pv{-webkit-user-select:none;user-select:none}
 .content-page{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
 .content-page main{height:auto}
 .content-main{display:flex;align-items:center;width:100%;min-height:100svh;margin:0 auto}
 .contact-copy{width:100%;max-width:595px}
-.contact-image{display:block;width:100%;aspect-ratio:16 / 9;margin-bottom:12px;object-fit:cover;object-position:top center;animation:contact-fade-in 1.4s ease .5s both}
-.contact-form{display:flex;gap:15px;padding:15px 15px 19px;flex-direction:column;border:1px solid var(--fg);animation:contact-fade-in 1.4s ease .5s both}
-.contact-email{animation:contact-fade-in 1.4s ease .5s both}
+.contact-image{display:block;width:100%;aspect-ratio:16 / 9;margin-bottom:12px;object-fit:cover;object-position:top center}
+.contact-form{display:flex;gap:15px;padding:15px 15px 19px;flex-direction:column;border:1px solid var(--fg)}
 .contact-fields{display:grid;gap:14px}
 .contact-form label{display:grid;gap:8px;min-width:0}
 .contact-form label>span{font-size:13px;line-height:1.6}
@@ -79,7 +77,7 @@ main{height:100%}
 .skip:focus{left:18px;top:56px}
 a:focus-visible,button:focus-visible,.ring:focus-visible,.pv img:focus-visible{outline:1px solid var(--fg);outline-offset:4px}
 .ring:focus-visible{border-radius:50%}
-@media (prefers-reduced-motion:reduce){.pv img,.ring,.it,.mobile-menu{transition:none!important}.contact-image,.contact-form,.contact-email,.mobile-menu[open]::backdrop,.menu-close span{animation:none!important}.menu-close span:first-child{transform:translateY(3px) rotate(45deg)}.menu-close span:last-child{transform:translateY(-3px) rotate(-45deg)}}
+@media (prefers-reduced-motion:reduce){.pv img,.ring,.it,.mobile-menu{transition:none!important}.mobile-menu[open]::backdrop,.menu-close span{animation:none!important}.menu-close span:first-child{transform:translateY(3px) rotate(45deg)}.menu-close span:last-child{transform:translateY(-3px) rotate(-45deg)}}
 @media (forced-colors:active){.tick{background:CanvasText}}
 
 .contact-page .content-main{justify-content:center;padding:24px}
