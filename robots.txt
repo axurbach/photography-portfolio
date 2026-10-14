@@ -4,5 +4,5 @@ Allow: /
 # Sitemap
 Sitemap: https://17099450a.com/sitemap.xml
 
-# Disallow archive and development files
+# Keep archive and development files out of search
 Disallow: /archive/
