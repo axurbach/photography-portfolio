@@ -6,7 +6,6 @@ const PREVIEW_H = 629;
 const PREVIEW_W = PREVIEW_H * 3 / 4;
 const OVERLAP = 0.85;
 const FRICTION = 2.4;
-const BACKGROUND_LOAD_LIMIT = 3;
 
 /* shared helpers */
 const $ = selector => document.querySelector(selector);
@@ -72,15 +71,13 @@ const items = list
     }))
     .sort(() => Math.random() - 0.5);
 
-items.forEach((item, index) => {
+items.forEach(item => {
     const element = document.createElement("div");
     element.className = "it";
-    element.style.transitionDelay = index * 70 + "ms";
     element.setAttribute("aria-hidden", "true");
 
     const image = new Image();
     image.decoding = "async";
-    image.fetchPriority = "low";
     image.onload = () => {
         item.nw = image.naturalWidth;
         item.nh = image.naturalHeight;
@@ -133,31 +130,6 @@ function loadImage(item, priority) {
     item.loading = true;
     item.im.fetchPriority = priority;
     item.im.src = item.s;
-}
-
-function loadRemainingImages() {
-    const queue = items.filter(item => !item.loading);
-    let activeLoads = 0;
-
-    function loadNext() {
-        while (activeLoads < BACKGROUND_LOAD_LIMIT && queue.length) {
-            const item = queue.shift();
-            if (!item || item.loading) {
-                continue;
-            }
-
-            activeLoads++;
-            const onComplete = () => {
-                activeLoads--;
-                loadNext();
-            };
-            item.im.addEventListener("load", onComplete, { once: true });
-            item.im.addEventListener("error", onComplete, { once: true });
-            loadImage(item, "low");
-        }
-    }
-
-    loadNext();
 }
 
 /* gallery layout */
@@ -563,22 +535,24 @@ addEventListener("resize", () => {
 
 layout();
 place();
-requestAnimationFrame(loadRemainingImages);
+items.forEach(item => loadImage(item, item === items[cur] ? "high" : "auto"));
 
-const initialImage = items[Math.max(cur, 0)].im;
-const initialReady = initialImage.complete
-    ? Promise.resolve()
-    : initialImage.decode
-        ? initialImage.decode().catch(() => {})
-        : new Promise(resolve => {
-            initialImage.addEventListener("load", resolve, { once: true });
-            initialImage.addEventListener("error", resolve, { once: true });
-        });
+const imagesReady = items.map(({ im }) => {
+    if (im.decode) {
+        return im.decode().catch(() => {});
+    }
 
-Promise.race([
-    initialReady,
-    new Promise(resolve => setTimeout(resolve, 2500)),
-]).then(() => requestAnimationFrame(() => {
+    if (im.complete) {
+        return Promise.resolve();
+    }
+
+    return new Promise(resolve => {
+        im.addEventListener("load", resolve, { once: true });
+        im.addEventListener("error", resolve, { once: true });
+    });
+});
+
+Promise.all(imagesReady).then(() => requestAnimationFrame(() => {
     body.classList.add("ready");
     ready = true;
     announce();

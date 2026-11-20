@@ -140,7 +140,7 @@ main {
     max-height: 62vh;
     opacity: 0;
     object-fit: cover;
-    transition: opacity 1.4s ease 0.5s;
+    transition: opacity 1.2s ease;
 }
 
 .rc {
@@ -159,7 +159,7 @@ main {
     position: relative;
     opacity: 0;
     touch-action: none;
-    transition: opacity 1.6s ease;
+    transition: opacity 1.2s ease;
 }
 
 .ring.drag,
